@@ -23,7 +23,34 @@
   -o-border-radius: 2px;
 }
 
+
+.ck-content h2 {
+  font-size: 24px ; 
+}
+
+.ck-content h3 {
+  font-size: 20px;
+}
+
+.ck-content h4 {
+  font-size: 18px;
+}
+.ck-content ul , ol{
+  list-style: circle;
+  margin-left: 10px;
+}
+.ck-content ol{
+  list-style: auto;
+  margin-left: 25px;
+}
+.ck-content a{
+  cursor: pointer;
+  color: cadetblue;
+}
+
 @layer components {
+  /* ckeditor styles */
+  
   .text-header {
     font-size: 24px;
     font-weight: 700;
@@ -39,6 +66,7 @@
     font-weight: 400;
     opacity: 0.5;
   }
+
 
   .text-default {
     color: #1D1E18
@@ -65,7 +93,7 @@
   }
 
   .btn {
-    @apply py-2 px-8 rounded-md border font-bold
+    @apply py-2 px-8 rounded-md border font-bold shadow
   }
 
   .btn-cancel {
@@ -75,4 +103,6 @@
   .btn-primary {
     background: #EC5990;
   }
+
+  
 }

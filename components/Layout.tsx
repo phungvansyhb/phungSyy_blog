@@ -9,7 +9,8 @@ import {
 } from "../assets/icons";
 import Switch from "./Switch";
 import Link from 'next/link'
-import useScreenDetect from "../hooks/useScreenDetect";
+
+// import useScreenDetect from "../hooks/useScreenDetect";
 
 type MetaScreenSeo ={
     title : string ,
@@ -19,7 +20,7 @@ type MetaScreenSeo ={
 type Props = { children: React.ReactElement , metaObject :MetaScreenSeo  };
 
 export default function Layout({ children , metaObject }: Props) {
-    const screen = useScreenDetect()
+    // const screen = useScreenDetect()
     
     function handleChangeTheme(checked: boolean) {
         if (checked) {
@@ -37,7 +38,7 @@ export default function Layout({ children , metaObject }: Props) {
                 <link rel="icon" href="/medal.svg" />
             </Head>
             <main>
-                <header className="flex justify-between px-[72px] py-8 bg-white dark:bgc-dark shadow-md dark:shadow-2xl sticky top-0">
+                <header className="flex justify-between px-[72px] py-4 bg-white dark:bgc-dark shadow-md dark:shadow-2xl sticky top-0">
                     <section className="flex gap-8">
                         <Link href='/' className="flex gap-2 items-center text-header dark:text-white">
                             <BlogIconHeader className="w-6 h-6" /> Blog
