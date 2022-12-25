@@ -14,7 +14,7 @@ export default function BlogIconHeader({ className }: Props) {
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
         >
-            <g clip-path="url(#clip0_3_55)">
+            <g clipPath="url(#clip0_3_55)">
                 <path
                     d="M9.56249 3.23749L1.83749 18.275V22.2875H5.84999L9.56249 3.23749Z"
                     fill="#62BBC7"
