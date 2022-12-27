@@ -1,16 +1,50 @@
-import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
-import { CKEditor } from "@ckeditor/ckeditor5-react";''
-import React from "react";
+import dynamic from "next/dynamic";
 
-const Editor = ({ defaultValue, onChange }) => {
+const QuillNoSSRWrapper = dynamic(import("react-quill"), {
+    ssr: false,
+    loading: () => <p>Loading ...</p>,
+});
+const modules = {
+    toolbar: [
+        [{ header: "1" }, { header: "2" }, { font: [] }],
+        [{ size: [] }],
+        ["bold", "italic", "underline", "strike", "blockquote"],
+        [{ list: "ordered" }, { list: "bullet" }, { indent: "-1" }, { indent: "+1" }],
+        ["link", "image", "video"],
+        ["clean"],
+    ],
+    clipboard: {
+        // toggle to add extra line breaks when pasting HTML:
+        matchVisual: false,
+    },
+};
+
+const formats = [
+    "header",
+    "font",
+    "size",
+    "bold",
+    "italic",
+    "underline",
+    "strike",
+    "blockquote",
+    "list",
+    "bullet",
+    "indent",
+    "link",
+    "image",
+    "video",
+];
+
+const Editor = ({onChange , defaultValue}) => {
     return (
-        <CKEditor
-            editor={ClassicEditor}
-            data={defaultValue}
-            onChange={(_event, editor) => {
-                onChange(editor.getData());
-            }}
-            
+        <QuillNoSSRWrapper
+            modules={modules}
+            formats={formats}
+            defaultValue={defaultValue}
+            // id='quill-editor'
+            theme="snow"
+            onChange={(content)=>onChange(content)}
         />
     );
 };

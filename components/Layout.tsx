@@ -9,7 +9,7 @@ import {
 } from "../assets/icons";
 import Switch from "./Switch";
 import Link from 'next/link'
-
+import {Toaster} from 'react-hot-toast'
 // import useScreenDetect from "../hooks/useScreenDetect";
 
 type MetaScreenSeo ={
@@ -39,6 +39,7 @@ export default function Layout({ children , metaObject }: Props) {
             </Head>
             <main>
                 <header className="flex justify-between px-[72px] py-4 bg-white dark:bgc-dark shadow-md dark:shadow-2xl sticky top-0">
+                    <Toaster position="top-center"/>
                     <section className="flex gap-8">
                         <Link href='/' className="flex gap-2 items-center text-header dark:text-white">
                             <BlogIconHeader className="w-6 h-6" /> Blog

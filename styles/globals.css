@@ -103,6 +103,13 @@
   .btn-primary {
     background: #EC5990;
   }
-
+  .input{
+    @apply border border-[#cccccc] rounded-md px-2 py-1 text-base
+  }
+  .input:focus{
+    /* border: none; */
+    /* border : #2684ff; */
+    outline: #2684ff;
+  }
   
 }
