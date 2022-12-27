@@ -16,6 +16,6 @@
     "sourceMap": true,
     "incremental": true
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "pages/admin.jsx"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "pages/admin.tsx"],
   "exclude": ["node_modules"]
 }

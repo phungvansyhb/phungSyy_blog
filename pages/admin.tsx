@@ -1,15 +1,23 @@
 import dynamic from "next/dynamic";
-import React from "react";
+import React, { FormEvent, Ref } from "react";
 import { toast } from "react-hot-toast";
-import Layout from "../components/Layout";
-import CreatableSelect from "react-select/creatable";
-import { createDoc, getListDocs, getDetailDoc } from "../services/fireBase.service";
 import { useMutation, useQuery, useQueryClient } from "react-query";
+import { GroupBase } from "react-select";
+import CreatableSelect from "react-select/creatable";
+import Select from "react-select/dist/declarations/src/Select";
+import Layout from "../components/Layout";
+import { createDoc, getListDocs } from "../services/fireBase.service";
+
+type Post = {
+    title: string;
+    content: string;
+    category: string;
+};
 
 const Page = () => {
     const [content, setContent] = React.useState("halo");
-    const titleRef = React.useRef(null);
-    const selectRef = React.useRef(null);
+    const titleRef = React.useRef<HTMLInputElement>(null);
+    const selectRef = React.useRef<Ref<Select<string, false, GroupBase<string>>> | undefined>(null);
     const queryClient = useQueryClient();
     const Editor = React.useMemo(
         () =>
@@ -18,22 +26,25 @@ const Page = () => {
             }),
         []
     );
-    const { data, isLoading, refetch } = useQuery("getListCate", () => getListDocs("categories"), [
-        { placeholderData: [] },
-    ]);
+    const { data, isLoading, refetch } = useQuery("getListCate", () => getListDocs("categories"), {
+        placeholderData: [],
+    });
     const createCategory = useMutation(
         "createMutation",
-        (cateName) => createDoc("categories", { name: cateName }),
+        (cateName: string) => createDoc("categories", { name: cateName }),
         {
             onSuccess: (_idCreated, variable) => {
-                queryClient.setQueryData("getListCate", [...data, { name: variable }]);
+                if (Array.isArray(data)) {
+                    queryClient.setQueryData("getListCate", [...data, { name: variable }]);
+                }
                 console.log(data, variable);
             },
         }
     );
     const createPost = useMutation(
         "createPost",
-        (post, category) => createDoc(`posts`, post, category),
+        ({ post, category }: { post: Post; category: string }) =>
+            createDoc(`posts`, post, [category]),
         {
             onSuccess: () => {
                 toast.success("Tạo bài viết thành công");
@@ -41,35 +52,35 @@ const Page = () => {
         }
     );
     // const listCategory = getListDocs("post").then(res=>console.log(res))
-    function handleSave(e) {
+    function handleSave(e: FormEvent) {
         e.preventDefault();
-        const title = titleRef.current.value;
-        const category = selectRef.current.getValue();
+        const title = titleRef.current!.value;
+        const category = (selectRef.current as any).getValue();
         console.log(category[0]);
         if (!title) {
             toast.error("title required !");
-            titleRef.current.focus();
+            titleRef.current!.focus();
             return;
         }
         if (category.length === 0) {
             toast.error("category required !");
-            selectRef.current.focus();
+            (selectRef.current as any).focus();
             return;
         }
         if (!content) {
             toast.error("content required !");
             return;
         }
-        createPost.mutate(
-            {
-                title: titleRef.current.value,
+        createPost.mutate({
+            post: {
+                title: titleRef.current!.value,
                 category: category[0].value,
                 content: content,
             },
-            category[0].value
-        );
+            category: category[0].value,
+        });
     }
-    function handleCreateCate(inputValue) {
+    function handleCreateCate(inputValue: string) {
         createCategory.mutate(inputValue);
     }
 
@@ -92,9 +103,12 @@ const Page = () => {
                     <label htmlFor="title">Thể loại bài viết :</label>
                     {!isLoading ? (
                         <CreatableSelect
-                            ref={selectRef}
+                            ref={selectRef as any}
                             isClearable
-                            options={data.map((el) => ({ value: el.name, label: el.name }))}
+                            options={(data as any).map((el: any) => ({
+                                value: el.name,
+                                label: el.name,
+                            }))}
                             onCreateOption={(inputValue) => handleCreateCate(inputValue)}
                             defaultValue=""
                         />
@@ -104,7 +118,10 @@ const Page = () => {
                 </div>
                 <div className="flex flex-col gap-2">
                     <label htmlFor="title">Nội dung bài viết :</label>
-                    <Editor defaultValue={content} onChange={(value) => setContent(value)} />
+                    <Editor
+                        defaultValue={content}
+                        onChange={(value: string) => setContent(value)}
+                    />
                 </div>
 
                 <div className="flex justify-center mt-6">
@@ -116,7 +133,7 @@ const Page = () => {
         </section>
     );
 };
-Page.getLayout = function (page) {
+Page.getLayout = function (page: React.ReactElement) {
     return (
         <Layout metaObject={{ title: "Admin editor", description: "Trang viết bài" }}>
             {page}
