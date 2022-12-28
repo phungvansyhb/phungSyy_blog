@@ -14,8 +14,9 @@
     "isolatedModules": true,
     "jsx": "preserve",
     "sourceMap": true,
-    "incremental": true
+    "incremental": true,
+    "baseUrl": "."
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "pages/admin.tsx"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "pages/admin/index.tsx"],
   "exclude": ["node_modules"]
 }

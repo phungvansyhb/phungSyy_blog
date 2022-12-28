@@ -1,5 +1,5 @@
 import { db } from '../config/firebase.config'
-import { collection, addDoc, getDocs, doc, getDoc, writeBatch, DocumentData } from "firebase/firestore";
+import { collection, addDoc,updateDoc, getDocs, doc, getDoc, writeBatch, DocumentData } from "firebase/firestore";
 
 async function createDoc(key: string, data: { [x: string]: any }, segment?: string[]) {
     try {
@@ -7,29 +7,40 @@ async function createDoc(key: string, data: { [x: string]: any }, segment?: stri
         return docRef.id
     } catch (e) {
         console.error("Error adding document: ", e);
+        return 'Error create document'
     }
 }
-async function batchCreate(key: string, data: { [x: string]: any }[]) {
+async function updateDocument(key: string, data: { [x: string]: any }, segment?: string[]) {
     try {
-        const batch = writeBatch(db);
-        batch.set(doc(db, key), data)
-        console.error(" adding document success: ");
-
+        segment ? await updateDoc(doc(db, key, ...segment!), data) : await updateDoc(doc(db, key), data);
+        return "success"
     } catch (e) {
-        console.error("Error adding document: ", e);
+        console.error("Error update document: ", e);
+        return 'Error update document'
     }
 }
 
 async function getListDocs(key: string) {
-    const result: DocumentData[] = []
-    const querySnapshot = await getDocs(collection(db, key));
-    querySnapshot.forEach((doc) => {
-        result.push(doc.data())
-    });
-    return result
+    try{
+        const result: DocumentData[] = []
+        const querySnapshot = await getDocs(collection(db, key));
+        querySnapshot.forEach((doc) => {
+            result.push({ id: doc.id, ...doc.data() })
+        });
+        return result
+    }catch(e){
+        return 'getListDocs fail'
+    }
+   
 }
-async function getDetailDoc(key: string , segment? : string[]) {
-    const docRef = segment ? doc(db, key, ...segment) : doc(db, key);
-    return await getDoc(docRef)
+async function getDetailDoc(key: string, segment?: string[]) {
+    try{
+        const docRef = segment ? doc(db, key, ...segment) : doc(db, key);
+        const document = await getDoc(docRef)
+        return document.data()
+    }catch(e){
+        return 'getDetailDoc fail'
+    }
+  
 }
-export { createDoc, getDetailDoc, getListDocs, batchCreate }
+export { createDoc, getDetailDoc, getListDocs , updateDocument }

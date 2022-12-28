@@ -41,7 +41,8 @@ const Editor = ({onChange , defaultValue}) => {
         <QuillNoSSRWrapper
             modules={modules}
             formats={formats}
-            defaultValue={defaultValue}
+            value={defaultValue}
+            // defaultValue={defaultValue}
             // id='quill-editor'
             theme="snow"
             onChange={(content)=>onChange(content)}

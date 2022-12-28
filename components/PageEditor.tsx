@@ -1,37 +1,32 @@
 import dynamic from "next/dynamic";
 import React, { FormEvent, Ref } from "react";
-import { toast } from "react-hot-toast";
-import { useMutation, useQuery, useQueryClient } from "react-query";
+import toast from "react-hot-toast";
+import { useQueryClient, useQuery, useMutation } from "react-query";
 import { GroupBase } from "react-select";
 import CreatableSelect from "react-select/creatable";
 import Select from "react-select/dist/declarations/src/Select";
-import Layout from "../components/Layout";
-import { createDoc, getListDocs } from "../services/fireBase.service";
+import { getListDocs, createDoc, updateDocument } from "../services/fireBase.service";
+import { Post, KeyDb } from "models/blog";
+import Editor from "components/Editor";
+import { useEffect } from "react";
+import { useRouter } from "next/router";
 
-type Post = {
-    title: string;
-    content: string;
-    category: string;
-};
+type Props = { isEdit: boolean; initPost?: Post };
 
-const Page = () => {
-    const [content, setContent] = React.useState("halo");
+export const PageEditor = ({ isEdit, initPost }: Props) => {
+    const [content, setContent] = React.useState(initPost?.content);
+    const [defaultSelected, setDefaultSelected] = React.useState({ value: "", label: "" });
     const titleRef = React.useRef<HTMLInputElement>(null);
     const selectRef = React.useRef<Ref<Select<string, false, GroupBase<string>>> | undefined>(null);
     const queryClient = useQueryClient();
-    const Editor = React.useMemo(
-        () =>
-            dynamic(() => import("../components/Editor"), {
-                ssr: false,
-            }),
-        []
-    );
-    const { data, isLoading, refetch } = useQuery("getListCate", () => getListDocs("categories"), {
+    const router = useRouter();
+
+    const { data, isLoading } = useQuery("getListCate", () => getListDocs("categories"), {
         placeholderData: [],
     });
     const createCategory = useMutation(
         "createMutation",
-        (cateName: string) => createDoc("categories", { name: cateName }),
+        (cateName: string) => createDoc(KeyDb.CATEGORY, { name: cateName }),
         {
             onSuccess: (_idCreated, variable) => {
                 if (Array.isArray(data)) {
@@ -43,20 +38,24 @@ const Page = () => {
     );
     const createPost = useMutation(
         "createPost",
-        ({ post, category }: { post: Post; category: string }) =>
-            createDoc(`posts`, post, [category]),
+        ({ post }: { post: Post }) => {
+            if (isEdit) {
+                return updateDocument(KeyDb.POST, post);
+            } else {
+                return createDoc(KeyDb.POST, post);
+            }
+        },
         {
             onSuccess: () => {
                 toast.success("Tạo bài viết thành công");
             },
         }
     );
-    // const listCategory = getListDocs("post").then(res=>console.log(res))
     function handleSave(e: FormEvent) {
         e.preventDefault();
         const title = titleRef.current!.value;
         const category = (selectRef.current as any).getValue();
-        console.log(category[0]);
+        const postObj = isEdit ? { ...initPost } : {};
         if (!title) {
             toast.error("title required !");
             titleRef.current!.focus();
@@ -73,17 +72,23 @@ const Page = () => {
         }
         createPost.mutate({
             post: {
+                ...postObj,
                 title: titleRef.current!.value,
                 category: category[0].value,
                 content: content,
+                updateAt: new Date().toLocaleString(),
             },
-            category: category[0].value,
         });
     }
     function handleCreateCate(inputValue: string) {
         createCategory.mutate(inputValue);
     }
-
+    useEffect(() => {
+        if (initPost) {
+            setContent(initPost.content);
+            setDefaultSelected({ value: initPost.category, label: initPost.category });
+        }
+    }, [initPost]);
     return (
         <section className="p-6 rounded-md overflow-hidden">
             <form className="flex flex-col gap-4" onSubmit={handleSave}>
@@ -96,7 +101,7 @@ const Page = () => {
                         type="text"
                         className="input"
                         ref={titleRef}
-                        defaultValue=""
+                        defaultValue={initPost?.title}
                     />
                 </div>
                 <div>
@@ -105,12 +110,14 @@ const Page = () => {
                         <CreatableSelect
                             ref={selectRef as any}
                             isClearable
+                            value={defaultSelected}
                             options={(data as any).map((el: any) => ({
                                 value: el.name,
                                 label: el.name,
                             }))}
+                            onChange={(newValue: any) => setDefaultSelected(newValue)}
                             onCreateOption={(inputValue) => handleCreateCate(inputValue)}
-                            defaultValue=""
+                            // inputValue = {defaultValue?.category}
                         />
                     ) : (
                         "loading"
@@ -124,20 +131,19 @@ const Page = () => {
                     />
                 </div>
 
-                <div className="flex justify-center mt-6">
-                    <button className="btn btn-primary" type="submit" onClick={handleSave}>
+                <div className="flex justify-center mt-6 gap-6">
+                    <button className="btn btn-primary" type="submit">
                         Save
+                    </button>
+                    <button
+                        className="btn btn-secondary"
+                        type="submit"
+                        onClick={() => router.back()}
+                    >
+                        Cancel
                     </button>
                 </div>
             </form>
         </section>
     );
 };
-Page.getLayout = function (page: React.ReactElement) {
-    return (
-        <Layout metaObject={{ title: "Admin editor", description: "Trang viết bài" }}>
-            {page}
-        </Layout>
-    );
-};
-export default Page;
