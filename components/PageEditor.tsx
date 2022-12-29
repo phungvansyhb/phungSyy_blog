@@ -20,7 +20,7 @@ export const PageEditor = ({ isEdit, initPost }: Props) => {
     const selectRef = React.useRef<Ref<Select<string, false, GroupBase<string>>> | undefined>(null);
     const queryClient = useQueryClient();
     const router = useRouter();
-
+    const {pid} = router.query
     const { data, isLoading } = useQuery("getListCate", () => getListDocs("categories"), {
         placeholderData: [],
     });
@@ -37,17 +37,28 @@ export const PageEditor = ({ isEdit, initPost }: Props) => {
         }
     );
     const createPost = useMutation(
-        "createPost",
         ({ post }: { post: Post }) => {
-            if (isEdit) {
-                return updateDocument(KeyDb.POST, post);
-            } else {
-                return createDoc(KeyDb.POST, post);
-            }
+            return createDoc(KeyDb.POST, post);
         },
         {
             onSuccess: () => {
                 toast.success("Tạo bài viết thành công");
+            },
+            onError: () => {
+                toast.error("Tạo bài viết thất bại");
+            },
+        }
+    );
+    const updatePost = useMutation(
+        ({ post }: { post: Post }) => {
+            return updateDocument(KeyDb.POST, post,[pid as string]);
+        },
+        {
+            onSuccess: () => {
+                toast.success("Update bài viết thành công");
+            },
+            onError: () => {
+                toast.error("Update bài viết thất bại");
             },
         }
     );
@@ -70,15 +81,18 @@ export const PageEditor = ({ isEdit, initPost }: Props) => {
             toast.error("content required !");
             return;
         }
-        createPost.mutate({
-            post: {
-                ...postObj,
-                title: titleRef.current!.value,
-                category: category[0].value,
-                content: content,
-                updateAt: new Date().toLocaleString(),
-            },
-        });
+        const finalObj = {
+            ...postObj,
+            title: titleRef.current!.value,
+            category: category[0].value,
+            content: content,
+            updateAt: new Date().toLocaleString(),
+        };
+        isEdit
+            ? updatePost.mutate({ post: finalObj })
+            : createPost.mutate({
+                  post: finalObj,
+              });
     }
     function handleCreateCate(inputValue: string) {
         createCategory.mutate(inputValue);
@@ -137,7 +151,7 @@ export const PageEditor = ({ isEdit, initPost }: Props) => {
                     </button>
                     <button
                         className="btn btn-secondary"
-                        type="submit"
+                        type="button"
                         onClick={() => router.back()}
                     >
                         Cancel
