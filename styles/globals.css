@@ -15,7 +15,7 @@
 }
 
 *::-webkit-scrollbar-thumb {
-  background-color: orange;
+  background-color: #EC5990;
   border-radius: 2px;
   -webkit-border-radius: 2px;
   -moz-border-radius: 2px;
@@ -93,7 +93,7 @@
   }
 
   .btn {
-    @apply py-2 px-8 rounded-md border font-bold shadow
+    @apply py-1 px-2 rounded-md border font-bold shadow
   }
 
   .btn-cancel {
@@ -102,6 +102,8 @@
 
   .btn-primary {
     background: #EC5990;
+    color : white;
+    font-weight: 700;
   }
   .input{
     @apply border border-[#cccccc] rounded-md px-2 py-1 text-base

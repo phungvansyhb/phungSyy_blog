@@ -13,9 +13,13 @@ import toast from "react-hot-toast";
 const Page = () => {
     const router = useRouter();
     const queryClient = useQueryClient();
-    const { data, isLoading } = useQuery("getAllPost", () => getListDocs("posts"), {
-        initialData: [],
-    });
+    const { data, isLoading } = useQuery(
+        "getAllPost",
+        () => getListDocs({ key: KeyDb.POST, orderKey: "updateAt", orderDirection: "desc" }),
+        {
+            initialData: [],
+        }
+    );
     const deletePost = useMutation(
         ({ key }: { key: string }) => {
             return deleteDocument(KeyDb.POST, [key]);
@@ -51,6 +55,7 @@ const Page = () => {
                         },
                         { index: "title", title: "Tên bài viết", align: "center" },
                         { index: "category", title: "Chủ đề", align: "center" },
+                        { index: "updateAt", title: "Chỉnh sửa gần nhất", align: "center" },
                         {
                             index: "action",
                             title: "Thao tác",

@@ -1,5 +1,5 @@
 import { db } from '../config/firebase.config'
-import { collection, addDoc, updateDoc, getDocs, doc, getDoc, DocumentData, startAt, limit , deleteDoc } from "firebase/firestore";
+import { collection, addDoc, updateDoc, getDocs, doc, getDoc, DocumentData, startAt, limit, deleteDoc, orderBy, query } from "firebase/firestore";
 
 async function createDoc(key: string, data: { [x: string]: any }, segment?: string[]) {
     try {
@@ -15,24 +15,31 @@ async function updateDocument(key: string, data: { [x: string]: any }, segment?:
         return await updateDoc(reference, data);
     } catch (e) {
         console.error("Error update document: ", e);
-        throw new Error("update error");   
+        throw new Error("update error");
     }
 }
-
-async function getListDocs(key: string) {
+async function getListDocs({ key, count, orderKey, orderDirection = 'asc' }: { key: string, count?: number, orderKey?: string, orderDirection?: 'asc' | 'desc' }) {
     try {
         const result: DocumentData[] = []
-        const querySnapshot = await getDocs(collection(db, key));
+        let queryObj = query(collection(db, key))
+        if (count && orderKey) {
+            queryObj = query(collection(db, key), limit(count), orderBy(orderKey, orderDirection));
+        } else if (!count && orderKey) {
+            queryObj = query(collection(db, key), orderBy(orderKey, orderDirection))
+        } else if (count && !orderKey) {
+            queryObj = query(collection(db, key), limit(count));
+        }
+        const querySnapshot = await getDocs(queryObj);
         querySnapshot.forEach((doc) => {
             result.push({ id: doc.id, ...doc.data() })
         });
         return result
     } catch (e) {
+        console.error(e);
+
         throw new Error("get list doc error");
     }
-
 }
-
 async function getDetailDoc(key: string, segment?: string[]) {
     try {
         const docRef = segment ? doc(db, key, ...segment) : doc(db, key);
@@ -42,7 +49,7 @@ async function getDetailDoc(key: string, segment?: string[]) {
         throw new Error('getDetailDoc fail')
     }
 }
-async function deleteDocument(key:string , segment?:string[]){
+async function deleteDocument(key: string, segment?: string[]) {
     try {
         const docRef = segment ? doc(db, key, ...segment) : doc(db, key);
         return await deleteDoc(docRef)
@@ -50,4 +57,4 @@ async function deleteDocument(key:string , segment?:string[]){
         throw new Error('delete fail')
     }
 }
-export { createDoc, getDetailDoc, getListDocs, updateDocument , deleteDocument }
+export { createDoc, getDetailDoc, getListDocs, updateDocument, deleteDocument }
