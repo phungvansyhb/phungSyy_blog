@@ -8,8 +8,9 @@ const modules = {
     toolbar: [
         [{ header: "1" }, { header: "2" }, { font: [] }],
         [{ size: [] }],
-        ["bold", "italic", "underline", "strike", "blockquote"],
+        ["bold", "italic", "underline", "strike", "blockquote","code-block"],
         [{ list: "ordered" }, { list: "bullet" }, { indent: "-1" }, { indent: "+1" }],
+        [{ align: '' }, { align: 'center' }, { align: 'right' }, { align: 'justify' }],
         ["link", "image", "video"],
         ["clean"],
     ],
@@ -28,12 +29,15 @@ const formats = [
     "underline",
     "strike",
     "blockquote",
+    "code",
     "list",
     "bullet",
     "indent",
     "link",
     "image",
     "video",
+    "align",
+    "clean"
 ];
 
 const Editor = ({onChange , defaultValue}) => {
@@ -45,6 +49,7 @@ const Editor = ({onChange , defaultValue}) => {
             // defaultValue={defaultValue}
             // id='quill-editor'
             theme="snow"
+            placeholder="Write something awesome !!! "
             onChange={(content)=>onChange(content)}
         />
     );

@@ -118,11 +118,12 @@ export const PageEditor = ({ isEdit, initPost }: Props) => {
         }
     }, [initPost]);
     return (
-        <section className="p-6 rounded-md overflow-hidden">
+        <section className="p-6 rounded-md overflow-hidden h-main-content">
             <form className="flex flex-col gap-4" onSubmit={handleSave}>
                 <div className="flex flex-col gap-2">
                     <label htmlFor="title">Tiêu đề bài viết :</label>
                     <input
+                        placeholder="Bài viết của bạn tên là ?"
                         id="title"
                         name="title"
                         required
@@ -143,7 +144,7 @@ export const PageEditor = ({ isEdit, initPost }: Props) => {
                             options={(data as any).map((el: any) => ({
                                 value: el.name,
                                 label: el.name,
-                            }))}
+                            }))}                            
                             onChange={(newValue: any) => setDefaultSelected(newValue)}
                             onCreateOption={(inputValue) => handleCreateCate(inputValue)}
                             // inputValue = {defaultValue?.category}
@@ -155,6 +156,7 @@ export const PageEditor = ({ isEdit, initPost }: Props) => {
                 <div className="flex flex-col gap-2">
                     <label htmlFor="description">Mô tả bài viết :</label>
                     <textarea
+                        placeholder="Mô tả ngắn gọn cho bài viết"
                         id="description"
                         name="description"
                         required

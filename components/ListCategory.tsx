@@ -20,7 +20,7 @@ export default function ListCategory() {
     if (isLoading) return <LoadingIcon className="w-6 h-6" />;
     if (Array.isArray(data))
         return (
-            <div className="flex gap-4 flex-wrap">
+            <div className="flex gap-4 mobile:gap-2 flex-wrap">
                  <button
                         onClick={() =>
                             router.push({

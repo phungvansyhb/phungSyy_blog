@@ -42,8 +42,6 @@ export default function Layout({ children, metaObject }: Props) {
     const [themeBlog, setTheme] = useLocalStorage(KeyDb.APPTHEME, KeyDb.DARKTHEME);
     const router = useRouter();
     const { pathname } = router;
-    console.log(pathname);
-
     useEffect(() => {
         if (themeBlog === KeyDb.LIGHTHEME) {
             document.documentElement.classList.remove("dark");
@@ -62,9 +60,16 @@ export default function Layout({ children, metaObject }: Props) {
                 </Head>
             )}
             <main>
-                <header className="flex justify-between px-[72px] py-4 bg-white dark:bgc-dark header-shadow dark:shadow-2xl sticky top-0 z-[1090]">
+                <header
+                    className="flex justify-between 
+                        px-[72px] tablet:px-[36px] mobile:px-[12px]
+                        py-4 
+                         bg-white dark:bgc-dark 
+                        header-shadow dark:shadow-2xl 
+                        sticky top-0 z-[1090]"
+                >
                     <Toaster position="top-center" />
-                    <section className="flex gap-8">
+                    <section className="flex gap-8 tablet:gap-6 mobile:gap-4 mobile:justify-around mobile:w-full">
                         <div className={`${pathname === "/" && "active-menu"}`}>
                             <Link
                                 href="/"
@@ -90,22 +95,42 @@ export default function Layout({ children, metaObject }: Props) {
                             </Link>
                         </div>
                     </section>
-                    <Switch
-                        defaultChecked={themeBlog === KeyDb.LIGHTHEME ? true : false}
-                        // defaultChecked={ false}
-                        onChecked={(checked: boolean) =>
-                            setTheme(checked ? KeyDb.LIGHTHEME : KeyDb.DARKTHEME)
-                        }
-                        checkedLabel={<LighThemeIcon className="w-8 h-8" />}
-                        unCheckedLabel={<DarkThemeIcon className="w-8 h-8" />}
-                    />
+                    <div className="mobile:hidden">
+                        <Switch
+                            defaultChecked={themeBlog === KeyDb.LIGHTHEME ? true : false}
+                            // defaultChecked={ false}
+                            onChecked={(checked: boolean) =>
+                                setTheme(checked ? KeyDb.LIGHTHEME : KeyDb.DARKTHEME)
+                            }
+                            checkedLabel={<LighThemeIcon className="w-8 h-8" />}
+                            unCheckedLabel={<DarkThemeIcon className="w-8 h-8" />}
+                        />
+                    </div>
                 </header>
-                <main>{children}</main>
-                <footer className="flex justify-between px-[88px] py-7 dark:bgc-dark ">
+                <main>
+                    {children}
+                    <div className="-rotate-90 fixed bottom-[100px] -left-4 hidden mobile:block">
+                        <Switch
+                            defaultChecked={themeBlog === KeyDb.LIGHTHEME ? true : false}
+                            // defaultChecked={ false}
+                            onChecked={(checked: boolean) =>
+                                setTheme(checked ? KeyDb.LIGHTHEME : KeyDb.DARKTHEME)
+                            }
+                            checkedLabel={<LighThemeIcon className="w-8 h-8" />}
+                            unCheckedLabel={<DarkThemeIcon className="w-8 h-8" />}
+                        />
+                    </div>
+                </main>
+                <footer
+                    className="flex justify-between
+                    px-[88px] tablet:px-[40px] mobile:px-6
+                    py-7
+                  dark:bgc-dark "
+                >
                     <div className="flex gap-2 font-bold text-info items-center dark:text-white">
                         @ Made by PhungSyy <HeartIcon className="w-6 h-6" />
                     </div>
-                    <div className="flex gap-6">
+                    <div className="flex gap-6 mobile:gap-2">
                         <FaceBookIcon className="w-6 h-6"></FaceBookIcon>
                         <SkypeIcon className="w-6 h-6"></SkypeIcon>
                         <GithubIcon className="w-6 h-6"></GithubIcon>

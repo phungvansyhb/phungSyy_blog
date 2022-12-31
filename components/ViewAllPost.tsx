@@ -41,7 +41,7 @@ export default function ViewAllPost({}: Props) {
                 Let pick a topic <MedalIcon className="w-6 h-6" />
             </h2>
             <ListCategory />
-            <div className="flex flex-col gap-8 mt-8">
+            <div className="flex flex-col gap-8 mobile:gap-4 mt-8 mobile:mt-4">
                 {renderAllPost()}
             </div>
         </section>

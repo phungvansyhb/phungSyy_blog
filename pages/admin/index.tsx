@@ -38,7 +38,7 @@ const Page = () => {
         }
     );
     return (
-        <div>
+        <div className="h-main-content">
             {Array.isArray(data) && (
                 <Table
                     loading={isLoading}

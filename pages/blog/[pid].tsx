@@ -12,8 +12,9 @@ import dynamic from "next/dynamic"
 // import Giscus from "@giscus/react";
 import Link from "next/link";
 import { useLocalStorage } from "hooks/useLocalStorage";
-import { parseSlug } from "utils/toSlug";
+// import Quill from 'react-quill'
 
+const Quill = dynamic(import('react-quill'),{ssr : false})
 const Giscus = dynamic(import("@giscus/react"),{ssr:false})
 type Props = {};
 
@@ -78,18 +79,19 @@ const BlogDetail: NextPageWithLayout = ({}: Props) => {
                     <meta name="viewport" content="width=device-width, initial-scale=1" />
                     <link rel="icon" href="/medal.svg" />
                 </Head>
-                <div className="px-6 py-12 h-main-content dark:bgc-dark">
+                <div className="px-6 mobile:px-4 py-12 mobile:py-8 h-main-content dark:bgc-dark">
                     <Link href={'/'}>
                         <BackIcon className="w-8 h-8" />
                     </Link>
-                    <div className="px-[100px]">
-                        <h1 className="text-header text-4xl text-center dark:text-white">
+                    <div className="px-[100px] mobile:px-2">
+                        <h1 className="text-header text-4xl mobile:text-2xl text-center dark:text-white">
                             {data.title}
                         </h1>
-                        <article
+                        <Quill readOnly={true} value={data.content} theme='bubble'/>
+                        {/* <article
                             dangerouslySetInnerHTML={{ __html: data.content }}
-                            className="my-12 dark:text-white"
-                        ></article>
+                            className="my-12 dark:text-white ql-container ql-snow"
+                        ></article> */}
                     </div>
                     <div className="comment">
                         <h2 className="text-sub-header text-primary flex gap-4 items-center">

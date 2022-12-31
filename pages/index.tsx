@@ -8,14 +8,18 @@ import { NextPageWithLayout } from "./_app";
 
 const Page: NextPageWithLayout = () => {
     return (
-        <main className="py-12 px-[120px] bg-gray-50 dark:bgc-dark min-h-screen">
+        <main className="
+        py-12 tablet:py-8 mobile:py-6
+        px-[120px] tablet:px-[40px] mobile:px-4
+        
+        bg-gray-50 dark:bgc-dark min-h-screen">
             <section>
                 <h2 className="flex text-sub-header gap-2 text-primary dark:text-white mb-6">
                     Latest <LatestIcon className="w-6 h-6" />
                 </h2>
                 <Slide />
             </section>
-            <div className="mt-24"></div>
+            <div className="mt-24 tablet:mt-16 mobile:mt-12"></div>
             <ViewAllPost />
         </main>
     );

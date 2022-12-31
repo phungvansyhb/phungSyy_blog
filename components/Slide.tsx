@@ -21,7 +21,8 @@ export default function Slide({}: Props) {
     );
     const { carouselFragment, slideToPrevItem, slideToNextItem } = useSpringCarousel({
         withLoop: true,
-        disableGestures: true,
+        // disableGestures: true,
+        draggingSlideTreshold: 35,
         itemsPerSlide: (function () {
             if (isLoading) return 1;
             else if (Array.isArray(data)) {
@@ -52,12 +53,13 @@ export default function Slide({}: Props) {
 
                     slideToPrevItem();
                 }}
+                className="mobile:hidden"
             >
                 <PlayBackIcon className="w-9 h-9" />
             </button>
 
             <div className="flex-grow overflow-hidden">{carouselFragment}</div>
-            <button onClick={slideToNextItem}>
+            <button onClick={slideToNextItem} className="mobile:hidden">
                 <PlayNextIcon className="w-9 h-9" />
             </button>
         </div>

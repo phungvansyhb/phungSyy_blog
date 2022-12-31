@@ -23,52 +23,53 @@
   -o-border-radius: 2px;
 }
 
+/* quill editor override css */
 
-.ck-content h2 {
-  font-size: 24px;
-}
+.ql-toolbar {
+  border-top-left-radius: 6px;
+  border-top-right-radius: 6px;
 
-.ck-content h3 {
-  font-size: 20px;
-}
-
-.ck-content h4 {
-  font-size: 18px;
 }
 
-.ck-content ul,
-ol {
-  list-style: circle;
-  margin-left: 10px;
+.ql-container {
+  min-height: 300px;
+  border-bottom-left-radius: 6px;
+  border-bottom-right-radius: 6px;
+}
+.ql-container img{
+  padding: 8px;
+  border: 1px solid lightgrey;
+  border-radius: 6px;
+  box-shadow:  rgba(149, 157, 165, 0.2) 0px 8px 24px;
+  width: 60%;
+  -webkit-border-radius: 6px;
+  -moz-border-radius: 6px;
+  -ms-border-radius: 6px;
+  -o-border-radius: 6px;
 }
 
-.ck-content ol {
-  list-style: auto;
-  margin-left: 25px;
+
+.header-shadow {
+  box-shadow: 0px 0px 24px 0px rgb(0 0 0 / 15%);
+  ;
 }
 
-.ck-content a {
-  cursor: pointer;
-  color: cadetblue;
-}
-.header-shadow{
-  box-shadow: 0px 0px 24px 0px rgb(0 0 0 / 15%);;
-}
-.light-item-shadow{
-  box-shadow : rgba(149, 157, 165, 0.2) 0px 8px 24px
+.light-item-shadow {
+  box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px
 }
 
 @keyframes slide {
-  0%{
+  0% {
     scale: 0;
-    
+
   }
-  100%{
+
+  100% {
     scale: 1;
   }
 }
 
-.active-menu::after{
+.active-menu::after {
   content: "";
   display: block;
   width: 120%;
@@ -83,6 +84,7 @@ ol {
   -ms-border-radius: 4px;
   -o-border-radius: 4px;
 }
+
 @layer components {
 
   /* ckeditor styles */
@@ -94,6 +96,16 @@ ol {
     font-size: 24px;
     font-weight: 700;
   }
+  @media screen and (max-width : 875px) {
+      .text-header{
+        font-size: 22px;
+      }
+  }
+  @media screen and (max-width : 475px) {
+    .text-header{
+      font-size: 20px;
+    }
+}
 
   .text-sub-header {
     font-size: 20px;
