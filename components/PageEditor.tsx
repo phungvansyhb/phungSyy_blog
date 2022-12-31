@@ -17,13 +17,18 @@ export const PageEditor = ({ isEdit, initPost }: Props) => {
     const [content, setContent] = React.useState(initPost?.content);
     const [defaultSelected, setDefaultSelected] = React.useState({ value: "", label: "" });
     const titleRef = React.useRef<HTMLInputElement>(null);
+    const descriptionRef = React.useRef<HTMLTextAreaElement>(null);
     const selectRef = React.useRef<Ref<Select<string, false, GroupBase<string>>> | undefined>(null);
     const queryClient = useQueryClient();
     const router = useRouter();
-    const {pid} = router.query
-    const { data, isLoading } = useQuery("getListCate", () => getListDocs("categories"), {
-        placeholderData: [],
-    });
+    const { pid } = router.query;
+    const { data, isLoading } = useQuery(
+        "getListCate",
+        () => getListDocs({ key: KeyDb.CATEGORY }),
+        {
+            placeholderData: [],
+        }
+    );
     const createCategory = useMutation(
         "createMutation",
         (cateName: string) => createDoc(KeyDb.CATEGORY, { name: cateName }),
@@ -51,7 +56,7 @@ export const PageEditor = ({ isEdit, initPost }: Props) => {
     );
     const updatePost = useMutation(
         ({ post }: { post: Post }) => {
-            return updateDocument(KeyDb.POST, post,[pid as string]);
+            return updateDocument(KeyDb.POST, post, [pid as string]);
         },
         {
             onSuccess: () => {
@@ -64,7 +69,10 @@ export const PageEditor = ({ isEdit, initPost }: Props) => {
     );
     function handleSave(e: FormEvent) {
         e.preventDefault();
-        const title = titleRef.current!.value;
+        const title = titleRef.current ? titleRef.current.value : initPost?.title;
+        const description = descriptionRef.current
+            ? descriptionRef.current.value
+            : initPost?.description;
         const category = (selectRef.current as any).getValue();
         const postObj = isEdit ? { ...initPost } : {};
         if (!title) {
@@ -77,14 +85,20 @@ export const PageEditor = ({ isEdit, initPost }: Props) => {
             (selectRef.current as any).focus();
             return;
         }
+        if (!description) {
+            toast.error("description required !");
+            descriptionRef.current!.focus();
+            return;
+        }
         if (!content) {
             toast.error("content required !");
             return;
         }
         const finalObj = {
             ...postObj,
-            title: titleRef.current!.value,
+            title: title,
             category: category[0].value,
+            description: description,
             content: content,
             updateAt: new Date().toLocaleString(),
         };
@@ -118,6 +132,7 @@ export const PageEditor = ({ isEdit, initPost }: Props) => {
                         defaultValue={initPost?.title}
                     />
                 </div>
+
                 <div>
                     <label htmlFor="title">Thể loại bài viết :</label>
                     {!isLoading ? (
@@ -136,6 +151,18 @@ export const PageEditor = ({ isEdit, initPost }: Props) => {
                     ) : (
                         "loading"
                     )}
+                </div>
+                <div className="flex flex-col gap-2">
+                    <label htmlFor="description">Mô tả bài viết :</label>
+                    <textarea
+                        id="description"
+                        name="description"
+                        required
+                        maxLength={100}
+                        className="input"
+                        ref={descriptionRef}
+                        defaultValue={initPost?.description}
+                    />
                 </div>
                 <div className="flex flex-col gap-2">
                     <label htmlFor="title">Nội dung bài viết :</label>

@@ -16,8 +16,13 @@ import ReadMoreIcon from "./ReadMoreIcon";
 import SkypeIcon from "./SkypeIcon";
 import TwitterIcon from "./TwitterIcon";
 import LoadingIcon from "./LoadingIcon";
-
+import MedalIcon from "./MedalIcon";
+import BackIcon from "./BackIcon";
+import CommentIcon from "./CommentIcon";
 export {
+    CommentIcon,
+    BackIcon,
+    MedalIcon,
     LoadingIcon,
     FaceBookIcon,
     GithubIcon,

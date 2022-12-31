@@ -1,66 +1,117 @@
 import Head from "next/head";
-import React from "react";
+import React, { useEffect } from "react";
 import {
     AboutIconHeader,
     BlogIconHeader,
     DarkThemeIcon,
+    FaceBookIcon,
+    GithubIcon,
+    HeartIcon,
     LighThemeIcon,
     ProjectIconHeader,
+    SkypeIcon,
+    TwitterIcon,
 } from "../assets/icons";
-import Switch from "./Switch";
-import Link from 'next/link'
-import {Toaster} from 'react-hot-toast'
+import dynamic from "next/dynamic";
+const Switch = dynamic(import("./Switch"), { ssr: false });
+import Link from "next/link";
+import { Toaster } from "react-hot-toast";
+import { useLocalStorage } from "hooks/useLocalStorage";
+import { KeyDb } from "models/blog";
+import { useRouter } from "next/router";
 // import useScreenDetect from "../hooks/useScreenDetect";
 
-type MetaScreenSeo ={
-    title : string ,
-    description :string 
-}
+type MetaScreenSeo = {
+    title: string;
+    description: string;
+};
 
-type Props = { children: React.ReactElement , metaObject :MetaScreenSeo  };
+type Props = {
+    children: React.ReactElement;
+    metaObject?: MetaScreenSeo;
+    // useCustomHeader?: boolean;
+};
+// async function loadUseLocalStorage(){
 
-export default function Layout({ children , metaObject }: Props) {
+//     const useLocalStorage = await import('hooks/useLocalStorage')
+//     return useLocalStorage
+// }
+
+export default function Layout({ children, metaObject }: Props) {
     // const screen = useScreenDetect()
-    
-    function handleChangeTheme(checked: boolean) {
-        if (checked) {
+    const [themeBlog, setTheme] = useLocalStorage(KeyDb.APPTHEME, KeyDb.DARKTHEME);
+    const router = useRouter();
+    const { pathname } = router;
+    console.log(pathname);
+
+    useEffect(() => {
+        if (themeBlog === KeyDb.LIGHTHEME) {
             document.documentElement.classList.remove("dark");
         } else {
             document.documentElement.classList.add("dark");
         }
-    }
+    }, [themeBlog]);
     return (
         <>
-            <Head>
-                <title>{metaObject.title}</title>
-                <meta name="description" content={metaObject.description} />
-                <meta name="viewport" content="width=device-width, initial-scale=1" />
-                <link rel="icon" href="/medal.svg" />
-            </Head>
+            {typeof metaObject === "object" && (
+                <Head>
+                    <title>{metaObject.title}</title>
+                    <meta name="description" content={metaObject.description} />
+                    <meta name="viewport" content="width=device-width, initial-scale=1" />
+                    <link rel="icon" href="/medal.svg" />
+                </Head>
+            )}
             <main>
-                <header className="flex justify-between px-[72px] py-4 bg-white dark:bgc-dark shadow-md dark:shadow-2xl sticky top-0">
-                    <Toaster position="top-center"/>
+                <header className="flex justify-between px-[72px] py-4 bg-white dark:bgc-dark header-shadow dark:shadow-2xl sticky top-0 z-[1090]">
+                    <Toaster position="top-center" />
                     <section className="flex gap-8">
-                        <Link href='/' className="flex gap-2 items-center text-header dark:text-white">
-                            <BlogIconHeader className="w-6 h-6" /> Blog
-                        </Link>
-                        <Link href='/project' className="flex gap-2 items-center text-header dark:text-white">
-                            <ProjectIconHeader className="w-6 h-6" /> Project
-                        </Link>
-                        <Link href='/about' className="flex gap-2 items-center text-header dark:text-white">
-                            <AboutIconHeader className="w-6 h-6" /> Me
-                        </Link>
+                        <div className={`${pathname === "/" && "active-menu"}`}>
+                            <Link
+                                href="/"
+                                className={`flex gap-2 items-center text-header dark:text-white text-primary`}
+                            >
+                                <BlogIconHeader className="w-6 h-6" /> Blog
+                            </Link>
+                        </div>
+                        <div className={`${pathname === "/project" && "active-menu"}`}>
+                            <Link
+                                href="/project"
+                                className={`flex gap-2 items-center text-header dark:text-white text-primary`}
+                            >
+                                <ProjectIconHeader className="w-6 h-6" /> Project
+                            </Link>
+                        </div>
+                        <div className={`${pathname === "/about" && "active-menu"}`}>
+                            <Link
+                                href="/about"
+                                className={`flex gap-2 items-center text-header dark:text-white text-primary `}
+                            >
+                                <AboutIconHeader className="w-6 h-6" /> Me
+                            </Link>
+                        </div>
                     </section>
                     <Switch
-                        defaultChecked={true}
-                        onChecked={handleChangeTheme}
+                        defaultChecked={themeBlog === KeyDb.LIGHTHEME ? true : false}
+                        // defaultChecked={ false}
+                        onChecked={(checked: boolean) =>
+                            setTheme(checked ? KeyDb.LIGHTHEME : KeyDb.DARKTHEME)
+                        }
                         checkedLabel={<LighThemeIcon className="w-8 h-8" />}
                         unCheckedLabel={<DarkThemeIcon className="w-8 h-8" />}
                     />
                 </header>
-                <main>
-                    {children}
-                </main>
+                <main>{children}</main>
+                <footer className="flex justify-between px-[88px] py-7 dark:bgc-dark ">
+                    <div className="flex gap-2 font-bold text-info items-center dark:text-white">
+                        @ Made by PhungSyy <HeartIcon className="w-6 h-6" />
+                    </div>
+                    <div className="flex gap-6">
+                        <FaceBookIcon className="w-6 h-6"></FaceBookIcon>
+                        <SkypeIcon className="w-6 h-6"></SkypeIcon>
+                        <GithubIcon className="w-6 h-6"></GithubIcon>
+                        <TwitterIcon className="w-6 h-6"></TwitterIcon>
+                    </div>
+                </footer>
             </main>
         </>
     );

@@ -10,14 +10,16 @@ import { ReactQueryDevtools } from "react-query/devtools";
 
 const courierPrime = Courier_Prime({ weight: "400", subsets: ["latin"] });
 export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
-    getLayout?: (page: ReactElement) => ReactNode;
+    getLayout?: (page: ReactElement, ...props: any[]) => ReactNode;
 };
 type AppPropsWithLayout = AppProps & {
     Component: NextPageWithLayout;
 };
 
 export default function App({ Component, pageProps }: AppPropsWithLayout) {
-    const [queryClient] = React.useState(() => new QueryClient());
+    const [queryClient] = React.useState(
+        () => new QueryClient({ defaultOptions: { queries: { refetchOnWindowFocus: false } } })
+    );
     const getLayout = Component.getLayout ?? ((page) => page);
     return getLayout(
         <QueryClientProvider client={queryClient}>

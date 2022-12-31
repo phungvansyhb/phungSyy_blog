@@ -8,7 +8,7 @@ type Props = {
 };
 
 export default function Switch({
-    defaultChecked = false,
+    defaultChecked ,
     onChecked,
     checkedLabel,
     unCheckedLabel,
