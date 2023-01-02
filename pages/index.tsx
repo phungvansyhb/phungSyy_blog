@@ -10,8 +10,7 @@ const Page: NextPageWithLayout = () => {
     return (
         <main className="
         py-12 tablet:py-8 mobile:py-6
-        px-[120px] tablet:px-[40px] mobile:px-4
-        
+        page-container
         bg-gray-50 dark:bgc-dark min-h-screen">
             <section>
                 <h2 className="flex text-sub-header gap-2 text-primary dark:text-white mb-6">

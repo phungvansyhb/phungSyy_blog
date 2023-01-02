@@ -4,6 +4,7 @@ import {
     AboutIconHeader,
     BlogIconHeader,
     DarkThemeIcon,
+    EmailIcon,
     FaceBookIcon,
     GithubIcon,
     HeartIcon,
@@ -24,13 +25,12 @@ import { useRouter } from "next/router";
 type MetaScreenSeo = {
     title: string;
     description: string;
-    
 };
 
 type Props = {
     children: React.ReactElement;
     metaObject?: MetaScreenSeo;
-    removeStickyHeader?: boolean
+    removeStickyHeader?: boolean;
 };
 // async function loadUseLocalStorage(){
 
@@ -38,7 +38,7 @@ type Props = {
 //     return useLocalStorage
 // }
 
-export default function Layout({ children, metaObject , removeStickyHeader }: Props) {
+export default function Layout({ children, metaObject, removeStickyHeader }: Props) {
     // const screen = useScreenDetect()
     const [themeBlog, setTheme] = useLocalStorage(KeyDb.APPTHEME, KeyDb.DARKTHEME);
     const router = useRouter();
@@ -67,7 +67,7 @@ export default function Layout({ children, metaObject , removeStickyHeader }: Pr
                         py-4 
                          bg-white dark:bgc-dark 
                         header-shadow dark:shadow-2xl 
-                        ${removeStickyHeader?'':'sticky'} top-0 z-[1090]`}
+                        ${removeStickyHeader ? "" : "sticky"} top-0 z-[1090]`}
                 >
                     <Toaster position="top-center" />
                     <section className="flex gap-8 tablet:gap-6 mobile:gap-4 mobile:justify-around mobile:w-full">
@@ -132,10 +132,35 @@ export default function Layout({ children, metaObject , removeStickyHeader }: Pr
                         @ Made by PhungSyy <HeartIcon className="w-6 h-6" />
                     </div>
                     <div className="flex gap-6 mobile:gap-2">
-                        <FaceBookIcon className="w-6 h-6"></FaceBookIcon>
-                        <SkypeIcon className="w-6 h-6"></SkypeIcon>
-                        <GithubIcon className="w-6 h-6"></GithubIcon>
-                        <TwitterIcon className="w-6 h-6"></TwitterIcon>
+                        <a
+                            href={"https://www.facebook.com/chickenz"}
+                            target="_blank"
+                            rel="noreferrer"
+                        >
+                            <FaceBookIcon className="w-6 h-6"></FaceBookIcon>
+                        </a>
+                        <a
+                            href={"https://join.skype.com/invite/wqaybwu8bppD"}
+                            target="_blank"
+                            rel="noreferrer"
+                        >
+                            <SkypeIcon className="w-6 h-6"></SkypeIcon>
+                        </a>
+                        <a
+                            href={"https://github.com/phungvansyhb"}
+                            target="_blank"
+                            rel="noreferrer"
+                        >
+                            <GithubIcon className="w-6 h-6"></GithubIcon>
+                        </a>
+                        <a
+                            href={"mailto:phungvansyhb@gmail.com"}
+                            target="_blank"
+                            rel="noreferrer"
+                        >
+                            <EmailIcon className="w-6 h-6"></EmailIcon>
+                        </a>
+                        {/* <TwitterIcon className="w-6 h-6"></TwitterIcon> */}
                     </div>
                 </footer>
             </main>

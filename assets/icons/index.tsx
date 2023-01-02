@@ -20,7 +20,9 @@ import MedalIcon from "./MedalIcon";
 import BackIcon from "./BackIcon";
 import CommentIcon from "./CommentIcon";
 import BookIcon from "./BookIcon";
+import EmailIcon from "./EmailIcon";
 export {
+    EmailIcon,
     BookIcon,
     CommentIcon,
     BackIcon,

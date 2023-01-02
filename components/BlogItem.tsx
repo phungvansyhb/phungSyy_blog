@@ -29,7 +29,9 @@ export const BlogItem = ({
         >
             <div className="text-info dark:text-white">{updateAt}</div>
             <div
-                className="text-sub-header line-clamp-2 dark:text-white cursor-pointer"
+                className="text-sub-header  dark:text-white cursor-pointer 
+                    first-letter:uppercase
+                "
                 onClick={navigateDetail}
             >
                 {title}

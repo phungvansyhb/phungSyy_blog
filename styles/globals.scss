@@ -212,6 +212,9 @@ body {
 }
 
 @layer components {
+  .page-container{
+    @apply px-[120px] tablet:px-[40px] mobile:px-4
+  }
   .title-pinned {
     background-color: white;
     font-size: 20px !important;

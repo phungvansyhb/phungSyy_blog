@@ -139,7 +139,7 @@ const BlogDetail: NextPageWithLayout = ({ data }: { data: Post }) => {
                                 key="outline"
                                 className="fixed right-0 top-[100px] mobile:top-[70px] bg-white dark:bgc-dark rounded-lg 
                                 shadow px-4 py-8 min-w-[350px] w-1/3 overflow-hidden border z-[200] 
-                                max-h-[calc(100vh_-_100px)] mobile:max-h-[calc(100vh_-_70px)] overflow-y-auto"
+                                max-h-[calc(100vh_-_100px)] mobile:max-h-[calc(100vh_-_70px)] overflow-y-auto leading-8"
                             >
                                 <ol className="flex flex-col gap-4">
                                     {toc.map((item, index) => (
@@ -172,7 +172,7 @@ const BlogDetail: NextPageWithLayout = ({ data }: { data: Post }) => {
                             <div className="ql-container ql-snow ql-disabled ">
                                 <article
                                     dangerouslySetInnerHTML={{ __html: content }}
-                                    className="dark:text-white  ql-editor"
+                                    className="dark:text-white  ql-editor leading-8"
                                 ></article>
                             </div>
                         </div>
