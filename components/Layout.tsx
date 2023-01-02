@@ -24,12 +24,13 @@ import { useRouter } from "next/router";
 type MetaScreenSeo = {
     title: string;
     description: string;
+    
 };
 
 type Props = {
     children: React.ReactElement;
     metaObject?: MetaScreenSeo;
-    // useCustomHeader?: boolean;
+    removeStickyHeader?: boolean
 };
 // async function loadUseLocalStorage(){
 
@@ -37,7 +38,7 @@ type Props = {
 //     return useLocalStorage
 // }
 
-export default function Layout({ children, metaObject }: Props) {
+export default function Layout({ children, metaObject , removeStickyHeader }: Props) {
     // const screen = useScreenDetect()
     const [themeBlog, setTheme] = useLocalStorage(KeyDb.APPTHEME, KeyDb.DARKTHEME);
     const router = useRouter();
@@ -61,12 +62,12 @@ export default function Layout({ children, metaObject }: Props) {
             )}
             <main>
                 <header
-                    className="flex justify-between 
+                    className={`flex justify-between 
                         px-[72px] tablet:px-[36px] mobile:px-[12px]
                         py-4 
                          bg-white dark:bgc-dark 
                         header-shadow dark:shadow-2xl 
-                        sticky top-0 z-[1090]"
+                        ${removeStickyHeader?'':'sticky'} top-0 z-[1090]`}
                 >
                     <Toaster position="top-center" />
                     <section className="flex gap-8 tablet:gap-6 mobile:gap-4 mobile:justify-around mobile:w-full">

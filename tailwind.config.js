@@ -5,7 +5,7 @@ module.exports = {
         extend: {},
         screens: {
             tablet: { max: "875px" },
-            mobile: { max: "475px" },
+            mobile: { max: "550px" },
         },
     },
     plugins: [require("@tailwindcss/line-clamp")],

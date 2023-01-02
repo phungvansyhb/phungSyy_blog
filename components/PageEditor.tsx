@@ -10,6 +10,7 @@ import { Post, KeyDb } from "models/blog";
 import Editor from "components/Editor";
 import { useEffect } from "react";
 import { useRouter } from "next/router";
+import { LoadingIcon } from "assets/icons";
 
 type Props = { isEdit: boolean; initPost?: Post };
 
@@ -118,7 +119,7 @@ export const PageEditor = ({ isEdit, initPost }: Props) => {
         }
     }, [initPost]);
     return (
-        <section className="p-6 rounded-md overflow-hidden h-main-content">
+        <section className="p-6 rounded-md h-main-content">
             <form className="flex flex-col gap-4" onSubmit={handleSave}>
                 <div className="flex flex-col gap-2">
                     <label htmlFor="title">Tiêu đề bài viết :</label>
@@ -175,8 +176,8 @@ export const PageEditor = ({ isEdit, initPost }: Props) => {
                 </div>
 
                 <div className="flex justify-center mt-6 gap-6">
-                    <button className="btn btn-primary" type="submit">
-                        Save
+                    <button className="btn btn-primary flex items-center gap-4" type="submit">
+                        {createPost.isLoading||updatePost.isLoading && <LoadingIcon className="w-6 h-6"/>} Save
                     </button>
                     <button
                         className="btn btn-secondary"

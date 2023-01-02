@@ -19,7 +19,9 @@ import LoadingIcon from "./LoadingIcon";
 import MedalIcon from "./MedalIcon";
 import BackIcon from "./BackIcon";
 import CommentIcon from "./CommentIcon";
+import BookIcon from "./BookIcon";
 export {
+    BookIcon,
     CommentIcon,
     BackIcon,
     MedalIcon,

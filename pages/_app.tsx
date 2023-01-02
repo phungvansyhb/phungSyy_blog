@@ -1,15 +1,15 @@
-import React from "react";
-import type { ReactElement, ReactNode } from "react";
+import { Courier_Prime } from "@next/font/google";
 import type { NextPage } from "next";
 import type { AppProps } from "next/app";
-import "../styles/globals.css";
-import "react-quill/dist/quill.snow.css";
-import { Courier_Prime } from "@next/font/google";
+import type { ReactElement, ReactNode } from "react";
+import React from "react";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { ReactQueryDevtools } from "react-query/devtools";
-
+import "react-quill/dist/quill.snow.css";
+import "../styles/globals.scss";
 const courierPrime = Courier_Prime({ weight: "400", subsets: ["latin"] });
-export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
+// const alegreya_Sans = Alegreya_Sans({ weight: "400", subsets: ["vietnamese"] });
+export type NextPageWithLayout<P = any, IP = P> = NextPage<P, IP> & {
     getLayout?: (page: ReactElement, ...props: any[]) => ReactNode;
 };
 type AppPropsWithLayout = AppProps & {
@@ -24,7 +24,7 @@ export default function App({ Component, pageProps }: AppPropsWithLayout) {
     return getLayout(
         <QueryClientProvider client={queryClient}>
             <main className={courierPrime.className}>
-                <Component {...pageProps} />
+                    <Component {...pageProps} />
             </main>
             <ReactQueryDevtools initialIsOpen={false} />
         </QueryClientProvider>

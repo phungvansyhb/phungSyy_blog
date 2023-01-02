@@ -6,14 +6,22 @@ const QuillNoSSRWrapper = dynamic(import("react-quill"), {
 });
 const modules = {
     toolbar: [
-        [{ header: "1" }, { header: "2" }, { font: [] }],
+        [{ header: "2" }],
         [{ size: [] }],
-        ["bold", "italic", "underline", "strike", "blockquote","code-block"],
-        [{ list: "ordered" }, { list: "bullet" }, { indent: "-1" }, { indent: "+1" }],
-        [{ align: '' }, { align: 'center' }, { align: 'right' }, { align: 'justify' }],
+        ["bold", "italic", "underline", "strike", "blockquote", "code-block"],
+        [
+            { list: "ordered" },
+            { list: "bullet" },
+            { list: "check" },
+            { indent: "-1" },
+            { indent: "+1" },
+        ],
+        [{ align: "" }, { align: "center" }, { align: "right" }, { align: "justify" }],
         ["link", "image", "video"],
+        [{ script: "sub" }, { script: "super" }],
         ["clean"],
     ],
+
     clipboard: {
         // toggle to add extra line breaks when pasting HTML:
         matchVisual: false,
@@ -21,26 +29,27 @@ const modules = {
 };
 
 const formats = [
+    "script",
     "header",
-    "font",
     "size",
     "bold",
     "italic",
     "underline",
     "strike",
     "blockquote",
-    "code",
+    "code-block",
     "list",
     "bullet",
+    "check",
     "indent",
     "link",
     "image",
     "video",
     "align",
-    "clean"
+    "clean",
 ];
 
-const Editor = ({onChange , defaultValue}) => {
+const Editor = ({ onChange, defaultValue }) => {
     return (
         <QuillNoSSRWrapper
             modules={modules}
@@ -50,7 +59,7 @@ const Editor = ({onChange , defaultValue}) => {
             // id='quill-editor'
             theme="snow"
             placeholder="Write something awesome !!! "
-            onChange={(content)=>onChange(content)}
+            onChange={(content) => onChange(content)}
         />
     );
 };
