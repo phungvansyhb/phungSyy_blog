@@ -145,7 +145,9 @@ export const PageEditor = ({ isEdit, initPost }: Props) => {
                             options={(data as any).map((el: any) => ({
                                 value: el.name,
                                 label: el.name,
-                            }))}                            
+                            }))}                
+                            className="z-100"    
+                                    
                             onChange={(newValue: any) => setDefaultSelected(newValue)}
                             onCreateOption={(inputValue) => handleCreateCate(inputValue)}
                             // inputValue = {defaultValue?.category}

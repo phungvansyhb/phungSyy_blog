@@ -29,7 +29,6 @@ function parseHTML(pageContent: string) {
             return (tree: Root) => {
                 visit(tree, "element", (node) => {
                     if (node.tagName === "h2") {
-                        console.log(node);
                         if (node.properties && node.children.length === 1) {
                             const id = parameterize((node.children[0] as any).value);
                             node.properties.id = id;
