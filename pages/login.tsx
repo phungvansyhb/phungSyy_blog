@@ -7,8 +7,9 @@ export default function Login({}: Props) {
     const router = useRouter()
     const inputRef = React.useRef<HTMLInputElement>(null);
     function handleCheckKey(){
+        
         const input = inputRef.current
-        if(input?.value === process.env.APP_KEY){
+        if(input?.value === process.env.NEXT_PUBLIC_APP_KEY){
             setCookie('appKey', input?.value , {expires : 1})
             router.back()
         }else{
