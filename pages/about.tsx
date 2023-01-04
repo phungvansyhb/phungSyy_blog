@@ -48,7 +48,7 @@ const Page: NextPageWithLayout = () => {
                         <li>
                             <b>Cầu tiến 🤝</b> - Mình thích sự công bằng và sòng phằng, công bằng
                             để cạnh tranh, công bằng mà thể hiện. Mấy đứa mà ỷ vào bố mẹ tao giàu,
-                            hay nhà tao hoàn cảnh thế này thế kia là mình chê 👊. Công bằng cũng tạo nên kẻ mạnh người yếu. Mình muốn mạnh 😑 nên mình luôn luôn cầu tiến !!!   
+                            hay nhà tao hoàn cảnh thế này thế kia là mình chê 👊. Công bằng cũng tạo nên kẻ mạnh người yếu. Mình muốn mạnh 😑 nên mình luôn luôn cầu tiến!!!   
                         </li>
                         <li>
                             <b>Healthy 💪</b> - Mình cũng vào viện đôi lần rồi nên mình rất quan tâm đến sức khỏe bản thân 😇, ngoài những lúc ngồi code hoa mắt thì mình cũng thể dục thể thao. Hằng tuần mình vẫn đá bóng nhờ zậy mà mình có một thân hình khỏe mạnh    
@@ -65,7 +65,7 @@ const Page: NextPageWithLayout = () => {
                             <b>Khả năng giao tiếp tồi tệ 💁‍♂️</b> - À thì cũng không đến mức cạy cả
                             ngày không nói được một câu, nhưng mà do ngồi máy tính nhiều nên lúc nói
                             chuyện với mọi người cảm giác cứ bị nhạt 😞 đặc biệt là mấy bạn nữ 😛 áp
-                            lực luôn !!!
+                            lực luôn!!!
                         </li>
                         <li>
                             <b>Không có tài lẻ 🐮</b> - Yeah, nhìn đi nhìn lại thì bản thân mình
@@ -73,7 +73,7 @@ const Page: NextPageWithLayout = () => {
                             phải có rất nhiều người yêu 😂
                         </li>
                         <li>
-                            <b>Dễ xúc động 😓</b> - Tuy là thân trai sức dài vai rộng nhưng không hiểu sao mình rất mau nước mắt 🙂, lúc đang nói mà xúc động là sẽ vừa mếu vừa nói. Mình nghĩ là mình vẫn còn chưa trường thành về mặt cảm xúc ! 
+                            <b>Dễ xúc động 😓</b> - Tuy là thân trai sức dài vai rộng nhưng không hiểu sao mình rất mau nước mắt 🙂, lúc đang nói mà xúc động là sẽ vừa mếu vừa nói. Mình nghĩ là mình vẫn còn chưa trường thành về mặt cảm xúc! 
                         </li>
                     </ul>
                 </section>

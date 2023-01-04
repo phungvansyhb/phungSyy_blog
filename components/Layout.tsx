@@ -1,5 +1,5 @@
 import Head from "next/head";
-import React, { useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
     AboutIconHeader,
     BlogIconHeader,
@@ -14,6 +14,7 @@ import {
     TwitterIcon,
 } from "../assets/icons";
 import dynamic from "next/dynamic";
+``;
 const Switch = dynamic(import("./Switch"), { ssr: false });
 import Link from "next/link";
 import { Toaster } from "react-hot-toast";
@@ -32,14 +33,9 @@ type Props = {
     metaObject?: MetaScreenSeo;
     removeStickyHeader?: boolean;
 };
-// async function loadUseLocalStorage(){
 
-//     const useLocalStorage = await import('hooks/useLocalStorage')
-//     return useLocalStorage
-// }
 
 export default function Layout({ children, metaObject, removeStickyHeader }: Props) {
-    // const screen = useScreenDetect()
     const [themeBlog, setTheme] = useLocalStorage(KeyDb.APPTHEME, KeyDb.DARKTHEME);
     const router = useRouter();
     const { pathname } = router;
@@ -110,6 +106,7 @@ export default function Layout({ children, metaObject, removeStickyHeader }: Pro
                 </header>
                 <main>
                     {children}
+
                     <div className="-rotate-90 fixed bottom-[100px] -left-4 hidden mobile:block">
                         <Switch
                             defaultChecked={themeBlog === KeyDb.LIGHTHEME ? true : false}
@@ -153,11 +150,7 @@ export default function Layout({ children, metaObject, removeStickyHeader }: Pro
                         >
                             <GithubIcon className="w-6 h-6"></GithubIcon>
                         </a>
-                        <a
-                            href={"mailto:phungvansyhb@gmail.com"}
-                            target="_blank"
-                            rel="noreferrer"
-                        >
+                        <a href={"mailto:phungvansyhb@gmail.com"} target="_blank" rel="noreferrer">
                             <EmailIcon className="w-6 h-6"></EmailIcon>
                         </a>
                         {/* <TwitterIcon className="w-6 h-6"></TwitterIcon> */}

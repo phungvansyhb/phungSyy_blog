@@ -12,5 +12,5 @@ export enum KeyDb{
     CATEGORY = 'categories',
     APPTHEME='blog-theme',
     LIGHTHEME = 'light',
-    DARKTHEME = 'dark'
+    DARKTHEME = 'dark',
 }
