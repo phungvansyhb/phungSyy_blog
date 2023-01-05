@@ -2,10 +2,12 @@ import type { NextPage } from "next";
 import type { AppProps } from "next/app";
 import type { ReactElement, ReactNode } from "react";
 import React from "react";
+import Script from 'next/script'
 import { QueryClient, QueryClientProvider } from "react-query";
 import { ReactQueryDevtools } from "react-query/devtools";
 import "react-quill/dist/quill.snow.css";
 import "../styles/globals.scss";
+
 export type NextPageWithLayout<P = any, IP = P> = NextPage<P, IP> & {
     getLayout?: (page: ReactElement, ...props: any[]) => ReactNode;
 };
@@ -21,6 +23,8 @@ export default function App({ Component, pageProps }: AppPropsWithLayout) {
     return getLayout(
         <QueryClientProvider client={queryClient}>
             <main className="font-sans">
+                    {/* <script async src="https://tally.so/widgets/embed.js"></script> */}
+                    <Script src="https://tally.so/widgets/embed.js" />
                     <Component {...pageProps} />
             </main>
             <ReactQueryDevtools initialIsOpen={false} />

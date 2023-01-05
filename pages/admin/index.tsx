@@ -46,7 +46,6 @@ const Page = () => {
                         {
                             index: "stt",
                             title: "#",
-                            // align: "center",
                             render: (index, record) => (
                                 <td className="text-center" key={`stt-${index}`}>
                                     {index + 1}
@@ -54,6 +53,13 @@ const Page = () => {
                             ),
                         },
                         { index: "title", title: "Tên bài viết", align: "center" },
+                        {
+                            index: "isPublic",
+                            title: "Công khai",
+                            render: (_index, record) => (
+                                <div className="text-center">{record.isPublic ? "👌" : "🚫"}</div>
+                            ),
+                        },
                         { index: "category", title: "Chủ đề", align: "center" },
                         { index: "updateAt", title: "Chỉnh sửa gần nhất", align: "center" },
                         {

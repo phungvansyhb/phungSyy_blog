@@ -18,12 +18,14 @@ async function updateDocument(key: string, data: { [x: string]: any }, segment?:
         throw new Error("update error");
     }
 }
-async function getListDocs({ key, count, orderKey, orderDirection = 'asc', whereClause }: { key: string, count?: number, orderKey?: string, orderDirection?: 'asc' | 'desc' , whereClause?:[string , '=='|'!=',string] }) {
+async function getListDocs({ key, count, orderKey, orderDirection = 'asc', whereClause }: { key: string, count?: number, orderKey?: string, orderDirection?: 'asc' | 'desc' , whereClause?:[string , '=='|'!=', any ][] }) {
     try {
         const result: DocumentData[] = []
         const queryConstraint:QueryConstraint[] = []
         if(whereClause){
-            queryConstraint.push(where(...whereClause))
+            for (let index = 0; index < whereClause.length; index++) {
+                queryConstraint.push(where(...whereClause[index]))
+            }
         }
         if(count){
             queryConstraint.push(limit(count))

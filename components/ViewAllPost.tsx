@@ -19,7 +19,12 @@ export default function ViewAllPost({}: Props) {
                 key: KeyDb.POST,
                 orderKey: "updateAt",
                 orderDirection: "desc",
-                whereClause: cateName ? ["category", "==", (cateName as string) || "*"] : undefined,
+                whereClause: cateName
+                    ? [
+                          ["category", "==", cateName],
+                          ["isPublic", "==", true],
+                      ]
+                    : [["isPublic", "==", true]],
             }),
         {}
     );
@@ -31,7 +36,9 @@ export default function ViewAllPost({}: Props) {
                 </div>
             );
         if (Array.isArray(data)) {
-            return (data as Post[]).map((item, index) => <BlogItem key={index} {...item} type="all" />);
+            return (data as Post[]).map((item, index) => (
+                <BlogItem key={index} {...item} type="all" />
+            ));
         }
         return <></>;
     }

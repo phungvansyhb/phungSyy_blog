@@ -18,6 +18,7 @@ export const PageEditor = ({ isEdit, initPost }: Props) => {
     const [content, setContent] = React.useState(initPost?.content);
     const [defaultSelected, setDefaultSelected] = React.useState({ value: "", label: "" });
     const titleRef = React.useRef<HTMLInputElement>(null);
+    const publicRef = React.useRef<HTMLInputElement>(null);
     const descriptionRef = React.useRef<HTMLTextAreaElement>(null);
     const selectRef = React.useRef<Ref<Select<string, false, GroupBase<string>>> | undefined>(null);
     const queryClient = useQueryClient();
@@ -71,6 +72,7 @@ export const PageEditor = ({ isEdit, initPost }: Props) => {
     function handleSave(e: FormEvent) {
         e.preventDefault();
         const title = titleRef.current ? titleRef.current.value : initPost?.title;
+        const isPublic = publicRef.current ? publicRef.current.checked : (initPost?.isPublic||false)
         const description = descriptionRef.current
             ? descriptionRef.current.value
             : initPost?.description;
@@ -98,6 +100,7 @@ export const PageEditor = ({ isEdit, initPost }: Props) => {
         const finalObj = {
             ...postObj,
             title: title,
+            isPublic : isPublic,
             category: category[0].value,
             description: description,
             content: content,
@@ -134,6 +137,10 @@ export const PageEditor = ({ isEdit, initPost }: Props) => {
                         defaultValue={initPost?.title}
                     />
                 </div>
+                <div className="flex gap-4">
+                    <span>Public bài viết:</span>
+                    <input type="checkbox" ref={publicRef} checked={initPost?.isPublic}></input>
+                </div>
 
                 <div>
                     <label htmlFor="title">Thể loại bài viết :</label>
@@ -145,9 +152,8 @@ export const PageEditor = ({ isEdit, initPost }: Props) => {
                             options={(data as any).map((el: any) => ({
                                 value: el.name,
                                 label: el.name,
-                            }))}                
-                            className="z-100"    
-                                    
+                            }))}
+                            className="z-100"
                             onChange={(newValue: any) => setDefaultSelected(newValue)}
                             onCreateOption={(inputValue) => handleCreateCate(inputValue)}
                             // inputValue = {defaultValue?.category}
@@ -179,7 +185,9 @@ export const PageEditor = ({ isEdit, initPost }: Props) => {
 
                 <div className="flex justify-center mt-6 gap-6">
                     <button className="btn btn-primary flex items-center gap-4" type="submit">
-                        {createPost.isLoading||updatePost.isLoading && <LoadingIcon className="w-6 h-6"/>} Save
+                        {createPost.isLoading ||
+                            (updatePost.isLoading && <LoadingIcon className="w-6 h-6" />)}{" "}
+                        Save
                     </button>
                     <button
                         className="btn btn-secondary"

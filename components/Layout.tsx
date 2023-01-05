@@ -1,5 +1,11 @@
+import { useLocalStorage } from "hooks/useLocalStorage";
+import { KeyDb } from "models/blog";
+import dynamic from "next/dynamic";
 import Head from "next/head";
-import React, { useContext, useEffect, useState } from "react";
+import Link from "next/link";
+import { useRouter } from "next/router";
+import React, { useEffect } from "react";
+import { Toaster } from "react-hot-toast";
 import {
     AboutIconHeader,
     BlogIconHeader,
@@ -10,17 +16,10 @@ import {
     HeartIcon,
     LighThemeIcon,
     ProjectIconHeader,
-    SkypeIcon,
-    TwitterIcon,
+    SkypeIcon
 } from "../assets/icons";
-import dynamic from "next/dynamic";
 ``;
 const Switch = dynamic(import("./Switch"), { ssr: false });
-import Link from "next/link";
-import { Toaster } from "react-hot-toast";
-import { useLocalStorage } from "hooks/useLocalStorage";
-import { KeyDb } from "models/blog";
-import { useRouter } from "next/router";
 // import useScreenDetect from "../hooks/useScreenDetect";
 
 type MetaScreenSeo = {
@@ -103,6 +102,8 @@ export default function Layout({ children, metaObject, removeStickyHeader }: Pro
                             unCheckedLabel={<DarkThemeIcon className="w-8 h-8" />}
                         />
                     </div>
+                    
+                    <button data-tally-open="wkbgqe" data-tally-emoji-text="👋" data-tally-emoji-animation="wave" className="fixed bottom-20 right-8 text-4xl mobile:text-3xl wave z-50">👋</button>
                 </header>
                 <main>
                     {children}

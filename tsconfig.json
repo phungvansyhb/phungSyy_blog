@@ -15,7 +15,8 @@
     "jsx": "preserve",
     "sourceMap": true,
     "incremental": true,
-    "baseUrl": "."
+    "baseUrl": ".",
+    "allowSyntheticDefaultImports": true,
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "pages/admin/index.tsx", "components/Editor.jsx"],
   "exclude": ["node_modules"]

@@ -6,6 +6,7 @@ export type Post = {
     category: string;
     updateAt : string ;
     isDeleted? : boolean;
+    isPublic:boolean
 };
 export enum KeyDb{
     POST = 'posts',

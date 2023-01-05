@@ -2,7 +2,7 @@ import { ReadMoreIcon } from "assets/icons";
 import { Post } from "models/blog";
 import React from "react";
 import { useRouter } from "next/router";
-import { toSlug } from "utils/toSlug";
+import dayjs from "utils/DayJs";
 
 export const BlogItem = ({
     category,
@@ -27,7 +27,7 @@ export const BlogItem = ({
              bg-white dark:bgc-deep-dark 
                rounded-lg py-3 px-6 flex flex-col gap-3 ${type === "slide" && "mx-4"}`}
         >
-            <div className="text-info dark:text-white">{updateAt}</div>
+            <div className="text-info dark:text-white">{dayjs(updateAt).fromNow()}</div>
             <div
                 className="text-sub-header  dark:text-white cursor-pointer 
                     first-letter:uppercase

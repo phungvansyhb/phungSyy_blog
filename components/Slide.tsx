@@ -16,6 +16,7 @@ export default function Slide({}: Props) {
                 key: KeyDb.POST,
                 orderKey: "updateAt",
                 count: 5,
+                whereClause : [["isPublic", "==", true]],
                 // orderDirection: "desc",
             }),
         {}

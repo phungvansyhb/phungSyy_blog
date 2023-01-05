@@ -132,6 +132,29 @@ body {
   }
 }
 
+@keyframes wavehand {
+  0%{
+    transform: rotate(-5deg);
+    -webkit-transform: rotate(-5deg);
+    -moz-transform: rotate(-5deg);
+    -ms-transform: rotate(-5deg);
+    -o-transform: rotate(-5deg);
+}
+  100%{
+    transform: rotate(25deg);
+    -webkit-transform: rotate(25deg);
+    -moz-transform: rotate(25deg);
+    -ms-transform: rotate(25deg);
+    -o-transform: rotate(25deg);
+}
+
+}
+
+.wave{
+  animation: wavehand 0.68s ease-out 0s infinite alternate ;
+  -webkit-animation: wavehand 0.68s ease-out 0s infinite alternate ;
+}
+
 /* when display for user add .editor-visualize class */
 .editor-visualize {
   .ql-container.ql-snow {
