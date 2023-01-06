@@ -67,7 +67,7 @@ const BlogDetail: NextPageWithLayout = ({ data }: { data: Post }) => {
             const sameCatePost = getListDocs({
                 key: KeyDb.POST,
                 count: 4,
-                whereClause: ["category", "==", data!.category],
+                whereClause: [["category", "==", data!.category]],
             }) as Promise<Post[]>;
             return (await sameCatePost).filter((item) => item.id !== pid);
         },
