@@ -188,10 +188,17 @@ body {
 }
 
 .ql-align-center {
-  text-align: center;
-  display: flex;
-  justify-content: center;
-  flex-wrap: wrap;
+  img{
+    transform: translateX(33%);
+    -webkit-transform: translateX(33%);
+    -moz-transform: translateX(33%);
+    -ms-transform: translateX(33%);
+    -o-transform: translateX(33%);
+}
+  // text-align: center;
+  // display: flex;
+  // justify-content: center;
+  // flex-wrap: wrap;
 }
 
 .ql-snow a {

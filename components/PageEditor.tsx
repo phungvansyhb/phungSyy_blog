@@ -139,7 +139,7 @@ export const PageEditor = ({ isEdit, initPost }: Props) => {
                 </div>
                 <div className="flex gap-4">
                     <span>Public bài viết:</span>
-                    <input type="checkbox" ref={publicRef} checked={initPost?.isPublic}></input>
+                    <input type="checkbox" ref={publicRef} defaultChecked={initPost?.isPublic}></input>
                 </div>
 
                 <div>
