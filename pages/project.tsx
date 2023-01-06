@@ -7,8 +7,6 @@ import AirSense from "assets/projectImgs/airsense.png";
 import PageBuilder from "assets/projectImgs/pageBuilder.png";
 import PetProject from "assets/projectImgs/petProject.png";
 
-const text =
-    "leading-6 So I started to walk into the water. I won't lie to you boys, I was terrified. But I pressed on, and as I made my way past the breakers a strange calm came over me. I don't know if it was divine intervention or the kinship of all living things but I tell you Jerry at that moment, I was a marine biologist.leading-7So I started to walk into the water. I won't lie to you boys, I was terrified. But I pressed on, and as I made my way past the breakers a strange calm came over me. I don't know if it was divine intervention or the kinship of all living things but I tell you Jerry at that moment, I was a marine biologist.leading-8So I started to walk into the water. I won't lie to you boys, I was terrified. But I pressed on, and as I made my way past the breakers a strange calm came over me. I don't know if it was divine intervention or the kinship of all living things but I tell you Jerry at that moment, I was a marine biologist.";
 const Page: NextPageWithLayout = () => {
     return (
         <section className="px-6 mobile:px-4 py-12 mobile:py-8 h-main-content dark:bgc-dark ">

@@ -38,7 +38,7 @@ export default function ProjectItem({
                 <article className="indent-8 first-letter:uppercase first-letter:font-bold first-letter:text-[32px] first-letter:font-sans">
                     {description}
                 </article>
-                <div className="flex gap-2 ">
+                <div className="flex gap-2 flex-wrap">
                     {techStacks.map((technology, index) => (
                         <span key={index} className="rounded-2xl py-0 px-2 bg-yellow-300 dark:bg-slate-500 font-medium w-max">
                             {technology}
