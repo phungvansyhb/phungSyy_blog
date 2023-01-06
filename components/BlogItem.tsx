@@ -21,8 +21,8 @@ export const BlogItem = ({
     }
     return (
         <div
-            className={`min-w-[300px] ${type === "related" && "w-1/4"} h-max 
-            dark:border-slate-800 border
+            className={`min-w-[300px] ${type === "related" && "w-1/4"} 
+            dark:border-slate-800 border w-full h-full
               ${type !== "slide" && "light-item-shadow"} dark:shadow-2xl
              bg-white dark:bgc-deep-dark 
                rounded-lg py-3 px-6 flex flex-col gap-3 ${type === "slide" && "mx-4"}`}
