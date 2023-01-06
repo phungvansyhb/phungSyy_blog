@@ -125,7 +125,7 @@ const BlogDetail: NextPageWithLayout = ({ data }: { data: Post }) => {
                 </Head>
                 <div className="px-6 mobile:px-4 py-12 mobile:py-8 h-main-content dark:bgc-dark">
                     {/* <div className="h-40 fixed top-0">{data.title}</div> */}
-                    <Link href={"/"}>
+                    <Link href={"/"} className='inline-block'>
                         <BackIcon className="w-8 h-8" />
                     </Link>
                     <AnimatePresence>
@@ -156,9 +156,9 @@ const BlogDetail: NextPageWithLayout = ({ data }: { data: Post }) => {
                         )}
                     </AnimatePresence>
 
-                    <div className="px-[100px] tablet:px-[50px] mobile:px-2 py-8 post-content dark:text-white">
+                    <div className="px-[100px] tablet:px-[50px] mobile:px-0 py-8 post-content dark:text-white">
                         <h1
-                            className="text-header text-4xl mobile:text-2xl text-center dark:text-white capitalize first-letter:text-5xl first-letter:italic  mobile:first-letter:text-4xl first-letter:font-serif mb-8 mobile:mb-6 sticky -top-[1px] z-10 bg-white flex gap-4 justify-center dark:bgc-dark"
+                            className="text-header text-4xl mobile:text-2xl text-center dark:text-white capitalize first-letter:text-5xl first-letter:italic  mobile:first-letter:text-4xl first-letter:font-serif mb-8 mobile:mb-6 sticky -top-[1px] z-10 bg-white flex gap-4 justify-center dark:bgc-dark mobile:px-5"
                             ref={titleRef}
                         >
                             {data.title}
@@ -167,7 +167,7 @@ const BlogDetail: NextPageWithLayout = ({ data }: { data: Post }) => {
                             </button>
                         </h1>
 
-                        <div className="quill editor-visualize flex justify-center">
+                        <div className="quill editor-visualize flex justify-center mobile:px-2">
                             <div className="ql-container ql-snow ql-disabled ">
                                 <article
                                     dangerouslySetInnerHTML={{ __html: content }}
