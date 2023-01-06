@@ -158,7 +158,7 @@ const BlogDetail: NextPageWithLayout = ({ data }: { data: Post }) => {
 
                     <div className="px-[100px] tablet:px-[50px] mobile:px-2 py-8 post-content dark:text-white">
                         <h1
-                            className="text-header text-4xl mobile:text-2xl text-center dark:text-white capitalize first-letter:text-5xl first-letter:italic  mobile:first-letter:text-4xl first-letter:font-serif mb-8 mobile:mb-6 sticky -top-[1px] flex gap-4 justify-center dark:bgc-dark"
+                            className="text-header text-4xl mobile:text-2xl text-center dark:text-white capitalize first-letter:text-5xl first-letter:italic  mobile:first-letter:text-4xl first-letter:font-serif mb-8 mobile:mb-6 sticky -top-[1px] z-10 bg-white flex gap-4 justify-center dark:bgc-dark"
                             ref={titleRef}
                         >
                             {data.title}

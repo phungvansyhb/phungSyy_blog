@@ -3,6 +3,7 @@ import { Post } from "models/blog";
 import React from "react";
 import { useRouter } from "next/router";
 import dayjs from "utils/DayJs";
+import Link from "next/link";
 
 export const BlogItem = ({
     category,
@@ -28,14 +29,13 @@ export const BlogItem = ({
                rounded-lg py-3 px-6 flex flex-col gap-3 ${type === "slide" && "mx-4"}`}
         >
             <div className="text-info dark:text-white">{dayjs(updateAt).fromNow()}</div>
-            <div
+            <Link
                 className="text-sub-header  dark:text-white cursor-pointer 
-                    first-letter:uppercase
-                "
-                onClick={navigateDetail}
+                    first-letter:uppercase"
+                href={`/blog/` + id}
             >
                 {title}
-            </div>
+            </Link>
             <button className="btn-primary btn w-max text-xs dark:text-white">#{category}</button>
             <div className="line-clamp-2 text-start dark:text-white">{description}</div>
             <div

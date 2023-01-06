@@ -32,7 +32,7 @@ export default function ViewAllPost({}: Props) {
         if (isLoading)
             return (
                 <div className="w-full flex justify-center">
-                    <LoadingIcon className="w-6 h-6" />
+                    <LoadingIcon className="w-6 h-6 animate-spin" />
                 </div>
             );
         if (Array.isArray(data)) {
