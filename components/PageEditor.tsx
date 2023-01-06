@@ -1,4 +1,3 @@
-import dynamic from "next/dynamic";
 import React, { FormEvent, Ref } from "react";
 import toast from "react-hot-toast";
 import { useQueryClient, useQuery, useMutation } from "react-query";

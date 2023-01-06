@@ -1,4 +1,4 @@
-import { useLocalStorage } from "hooks/useLocalStorage";
+import { useCookie } from "hooks/useCookies";
 import { KeyDb } from "models/blog";
 import dynamic from "next/dynamic";
 import Head from "next/head";
@@ -35,7 +35,7 @@ type Props = {
 
 
 export default function Layout({ children, metaObject, removeStickyHeader }: Props) {
-    const [themeBlog, setTheme] = useLocalStorage(KeyDb.APPTHEME, KeyDb.DARKTHEME);
+    const [themeBlog, setTheme] = useCookie(KeyDb.APPTHEME, KeyDb.DARKTHEME);
     const router = useRouter();
     const { pathname } = router;
     useEffect(() => {

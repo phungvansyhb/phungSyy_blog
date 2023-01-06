@@ -10,7 +10,7 @@ import Head from "next/head";
 import { BlogItem } from "components/BlogItem";
 import dynamic from "next/dynamic";
 import Link from "next/link";
-import { useLocalStorage } from "hooks/useLocalStorage";
+import { useCookie } from "hooks/useCookies";
 import { GetStaticPaths, GetStaticProps } from "next";
 import { unified } from "unified";
 import rehypeParse from "rehype-parse";
@@ -57,7 +57,7 @@ function parseHTML(pageContent: string) {
 const BlogDetail: NextPageWithLayout = ({ data }: { data: Post }) => {
     const router = useRouter();
     const { pid } = router.query;
-    const [theme, _setTheme] = useLocalStorage(KeyDb.APPTHEME, "");
+    const [theme, _setTheme] = useCookie(KeyDb.APPTHEME, "");
     const { content, toc } = useMemo(() => parseHTML(data.content), [data.content]);
     const titleRef = useRef<HTMLDivElement>(null);
     const [showOutline, setShowOutline] = useState(false);

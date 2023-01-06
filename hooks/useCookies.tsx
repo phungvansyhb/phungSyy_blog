@@ -1,7 +1,7 @@
 import { useState } from "react";
+import { setCookie , getCookie } from 'cookies-next';
 
-
-export function useLocalStorage<T>(
+export function useCookie<T>(
     key: string,
     initialValue: T
   ): [T, (value: T | ((val: T) => T)) => void] {
@@ -10,9 +10,9 @@ export function useLocalStorage<T>(
     const [storedValue, setStoredValue] = useState<T>(() => {
       try {
         // Get from local storage by key
-        const item = window.localStorage.getItem(key);
+        const item = getCookie(key);
         // Parse stored json or if none return initialValue
-        return item ? JSON.parse(item) : initialValue;
+        return typeof item === 'string' ? JSON.parse(item) : initialValue;
       } catch (error) {
         // If error also return initialValue
         console.log(error);
@@ -30,7 +30,7 @@ export function useLocalStorage<T>(
         // Save state
         setStoredValue(valueToStore);
         // Save to local storage
-        window.localStorage.setItem(key, JSON.stringify(valueToStore));
+        setCookie(key, JSON.stringify(valueToStore));
       } catch (error) {
         // A more advanced implementation would handle the error case
         console.log(error);

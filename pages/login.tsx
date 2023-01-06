@@ -1,6 +1,7 @@
 import React from "react";
-import { setCookie} from 'typescript-cookie'
+import { setCookie} from 'cookies-next'
 import {useRouter} from 'next/router'
+import dayjs from "dayjs";
 type Props = {};
 
 export default function Login({}: Props) {
@@ -10,7 +11,7 @@ export default function Login({}: Props) {
         
         const input = inputRef.current
         if(input?.value === process.env.NEXT_PUBLIC_APP_KEY){
-            setCookie('appKey', input?.value , {expires : 1})
+            setCookie('appKey', input?.value , {expires : dayjs().add(1,'day').toDate()})
             router.back()
         }else{
             input?.focus()
