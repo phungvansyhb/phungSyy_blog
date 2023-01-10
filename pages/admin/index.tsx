@@ -79,7 +79,10 @@ const Page = () => {
                                     </button>
                                     <button
                                         onClick={() => {
-                                            deletePost.mutate({ key: record.id });
+                                            const check = window.confirm("Bạn chắc chắn muốn xóa");
+                                            if (check) {
+                                                deletePost.mutate({ key: record.id });
+                                            }
                                         }}
                                     >
                                         <DeleteIcon className="w-6 h-6" />
