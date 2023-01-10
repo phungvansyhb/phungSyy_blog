@@ -12,7 +12,7 @@ export default function Login({}: Props) {
         const input = inputRef.current
         if(input?.value === process.env.NEXT_PUBLIC_APP_KEY){
             setCookie('appKey', input?.value , {expires : dayjs().add(1,'day').toDate()})
-            router.back()
+            router.push("/admin")
         }else{
             input?.focus()
         }

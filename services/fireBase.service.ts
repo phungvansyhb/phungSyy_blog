@@ -1,9 +1,9 @@
 import { db } from '../config/firebase.config'
-import { collection, addDoc, updateDoc, getDocs, doc, getDoc, DocumentData, startAt, limit, deleteDoc, orderBy, query, where , QueryConstraint } from "firebase/firestore";
+import { collection, addDoc,setDoc ,updateDoc, getDocs, doc, getDoc, DocumentData, startAt, limit, deleteDoc, orderBy, query, where , QueryConstraint } from "firebase/firestore";
 
-async function createDoc(key: string, data: { [x: string]: any }, segment?: string[]) {
+async function createDoc(key: string, data: { [x: string]: any },customId? : string ) {
     try {
-        return segment ? await addDoc(collection(db, key, ...segment!), data) : await addDoc(collection(db, key), data);
+        return customId ? await setDoc(doc(db, key, customId), data) : await addDoc(collection(db, key), data);
     } catch (e) {
         console.error("Error adding document: ", e);
         throw new Error("create error");

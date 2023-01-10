@@ -10,6 +10,7 @@ import Editor from "components/Editor";
 import { useEffect } from "react";
 import { useRouter } from "next/router";
 import { LoadingIcon } from "assets/icons";
+import { toSlug } from "utils/toSlug";
 
 type Props = { isEdit: boolean; initPost?: Post };
 
@@ -44,7 +45,7 @@ export const PageEditor = ({ isEdit, initPost }: Props) => {
     );
     const createPost = useMutation(
         ({ post }: { post: Post }) => {
-            return createDoc(KeyDb.POST, post);
+            return createDoc(KeyDb.POST, post , toSlug(post.title));
         },
         {
             onSuccess: () => {
