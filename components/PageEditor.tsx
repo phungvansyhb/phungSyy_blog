@@ -50,6 +50,8 @@ export const PageEditor = ({ isEdit, initPost }: Props) => {
         {
             onSuccess: () => {
                 toast.success("Tạo bài viết thành công");
+                router.push('/admin')
+
             },
             onError: () => {
                 toast.error("Tạo bài viết thất bại");
@@ -63,6 +65,7 @@ export const PageEditor = ({ isEdit, initPost }: Props) => {
         {
             onSuccess: () => {
                 toast.success("Update bài viết thành công");
+                router.push('/admin')
             },
             onError: () => {
                 toast.error("Update bài viết thất bại");

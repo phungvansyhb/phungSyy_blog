@@ -28,7 +28,10 @@ body {
   -ms-border-radius: 2px;
   -o-border-radius: 2px;
 }
-
+*::selection{
+  color : white;
+  background-color: #EC5990;
+}
 /* quill editor override css */
 .post-content {
   font-family: Arial, Helvetica, sans-serif;
@@ -359,5 +362,4 @@ body {
     /* border : #2684ff; */
     outline: #2684ff;
   }
-
 }

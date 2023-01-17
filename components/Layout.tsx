@@ -102,8 +102,10 @@ export default function Layout({ children, metaObject, removeStickyHeader }: Pro
                             unCheckedLabel={<DarkThemeIcon className="w-8 h-8" />}
                         />
                     </div>
-                    
-                    <button data-tally-open="wkbgqe" data-tally-emoji-text="👋" data-tally-emoji-animation="wave" className="fixed bottom-20 right-8 text-4xl mobile:text-3xl wave z-50">👋</button>
+                    {
+                        !pathname.includes("/admin") &&  <button data-tally-open="wkbgqe" data-tally-emoji-text="👋" data-tally-emoji-animation="wave" className="fixed bottom-20 right-8 text-4xl mobile:text-3xl wave z-50">👋</button>
+                    }
+                   
                 </header>
                 <main>
                     {children}
