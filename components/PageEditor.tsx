@@ -107,7 +107,7 @@ export const PageEditor = ({ isEdit, initPost }: Props) => {
             category: category[0].value,
             description: description,
             content: content,
-            updateAt: new Date().toLocaleString(),
+            updateAt: new Date(),
         };
         isEdit
             ? updatePost.mutate({ post: finalObj })

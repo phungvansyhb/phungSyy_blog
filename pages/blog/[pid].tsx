@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useRef, useState } from "react";
 import { useRouter } from "next/router";
 import { useQuery } from "react-query";
 import { getDetailDoc, getListDocs } from "services/fireBase.service";
-import { KeyDb, Post } from "models/blog";
+import { KeyDb, Post, ReturnPost } from "models/blog";
 import { BackIcon, BookIcon, CommentIcon, LatestIcon, LoadingIcon } from "assets/icons";
 import { NextPageWithLayout } from "pages/_app";
 import Layout from "components/Layout";
@@ -68,7 +68,7 @@ const BlogDetail: NextPageWithLayout = ({ data }: { data: Post }) => {
                 key: KeyDb.POST,
                 count: 4,
                 whereClause: [["category", "==", data!.category]],
-            }) as Promise<Post[]>;
+            }) as Promise<ReturnPost[]>;
             return (await sameCatePost).filter((item) => item.id !== pid);
         },
 

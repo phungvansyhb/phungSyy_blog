@@ -1,23 +1,23 @@
-import { LoadingIcon, PlayBackIcon, PlayNextIcon, ReadMoreIcon } from "assets/icons";
-import { KeyDb, Post } from "models/blog";
-import React from "react";
-import { useQuery } from "react-query";
-import { useSpringCarousel } from "react-spring-carousel";
+import { LoadingIcon, PlayBackIcon, PlayNextIcon, ReadMoreIcon } from 'assets/icons';
+import { KeyDb, ReturnPost } from 'models/blog';
+import React from 'react';
+import { useQuery } from 'react-query';
+import { useSpringCarousel } from 'react-spring-carousel';
 
-import { getListDocs } from "services/fireBase.service";
-import { BlogItem } from "./BlogItem";
+import { getListDocs } from 'services/fireBase.service';
+import { BlogItem } from './BlogItem';
 type Props = {};
 
 export default function Slide({}: Props) {
     const { data, isLoading } = useQuery(
-        "getAllPost",
+        'getAllPost',
         () =>
             getListDocs({
                 key: KeyDb.POST,
-                orderKey: "updateAt",
+                orderKey: 'updateAt',
                 count: 5,
-                whereClause : [["isPublic", "==", true]],
-                // orderDirection: "desc",
+                whereClause: [['isPublic', '==', true]],
+                orderDirection: 'desc',
             }),
         {}
     );
@@ -32,13 +32,13 @@ export default function Slide({}: Props) {
             }
         })(),
         items: Array.isArray(data)
-            ? (data as Post[]).map((post, key) => ({
+            ? (data as ReturnPost[]).map((post, key) => ({
                   id: `slide-${key}`,
                   renderItem: <BlogItem type="slide" {...post} />,
               }))
             : [
                   {
-                      id: "holder-slide",
+                      id: 'holder-slide',
                       renderItem: (
                           <div className="w-full h-full flex justify-center items-center">
                               <LoadingIcon className="w-8 h-8 animate-spin" />
@@ -51,7 +51,7 @@ export default function Slide({}: Props) {
         <div className="flex gap-8">
             <button
                 onClick={() => {
-                    console.log("prev");
+                    console.log('prev');
 
                     slideToPrevItem();
                 }}

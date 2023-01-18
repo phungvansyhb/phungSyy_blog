@@ -1,11 +1,11 @@
-import { LoadingIcon, MedalIcon } from "assets/icons";
-import React, { useState } from "react";
-import ListCategory from "./ListCategory";
-import { KeyDb, Post } from "models/blog";
-import { useQuery } from "react-query";
-import { getListDocs } from "services/fireBase.service";
-import { BlogItem } from "./BlogItem";
-import { useRouter } from "next/router";
+import { LoadingIcon, MedalIcon } from 'assets/icons';
+import React, { useState } from 'react';
+import ListCategory from './ListCategory';
+import { KeyDb, ReturnPost } from 'models/blog';
+import { useQuery } from 'react-query';
+import { getListDocs } from 'services/fireBase.service';
+import { BlogItem } from './BlogItem';
+import { useRouter } from 'next/router';
 
 type Props = {};
 
@@ -13,18 +13,18 @@ export default function ViewAllPost({}: Props) {
     const router = useRouter();
     const { cateName } = router.query;
     const { data, isLoading } = useQuery(
-        ["getAllPost", cateName],
+        ['getAllPost', cateName],
         () =>
             getListDocs({
                 key: KeyDb.POST,
-                orderKey: "updateAt",
-                orderDirection: "desc",
+                orderKey: 'updateAt',
+                orderDirection: 'desc',
                 whereClause: cateName
                     ? [
-                          ["category", "==", cateName],
-                          ["isPublic", "==", true],
+                          ['category', '==', cateName],
+                          ['isPublic', '==', true],
                       ]
-                    : [["isPublic", "==", true]],
+                    : [['isPublic', '==', true]],
             }),
         {}
     );
@@ -36,7 +36,7 @@ export default function ViewAllPost({}: Props) {
                 </div>
             );
         if (Array.isArray(data)) {
-            return (data as Post[]).map((item, index) => (
+            return (data as ReturnPost[]).map((item, index) => (
                 <BlogItem key={index} {...item} type="all" />
             ));
         }
