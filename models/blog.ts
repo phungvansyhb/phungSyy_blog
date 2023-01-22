@@ -20,4 +20,5 @@ export enum KeyDb {
     APPTHEME = 'blog-theme',
     LIGHTHEME = 'light',
     DARKTHEME = 'dark',
+    FIRST_USER = 'viewed'
 }

@@ -22,6 +22,7 @@ import { AnimatePresence, motion } from 'framer-motion';
 const Giscus = dynamic(import('@giscus/react'), { ssr: false });
 import 'intro.js/introjs.css';
 import { Steps } from 'intro.js-react';
+import { setCookie , getCookie} from 'cookies-next'
 
 function parseHTML(pageContent: string) {
     let TOC: { id: string; title: string }[] | [] = [];
@@ -71,6 +72,7 @@ const BlogDetail: NextPageWithLayout = ({ data }: { data: PostDetail }) => {
     const [stepEnable, setEnableStep] = useState(false);
     const [initStep] = useState(0);
     const [countIntro, setCountIntro] = useState(0);
+    const isAlreadyView = getCookie(KeyDb.FIRST_USER)
     const [steps] = useState([
         {
             element: '.outlineBtn',
@@ -104,7 +106,7 @@ const BlogDetail: NextPageWithLayout = ({ data }: { data: PostDetail }) => {
     }, []);
     useEffect(() => {
         function removeOutLine() {
-            if (countIntro === 0 && titleRef.current?.classList.contains('title-pinned')) {
+            if (countIntro === 0 && !isAlreadyView && titleRef.current?.classList.contains('title-pinned')) {
                 setEnableStep(true);
             }
             if (!titleRef.current?.classList.contains('title-pinned')) {
@@ -207,7 +209,8 @@ const BlogDetail: NextPageWithLayout = ({ data }: { data: PostDetail }) => {
                             onComplete={() => {
                                 setEnableStep(false);
                                 setCountIntro(1);
-                                window.scrollTo(0, 0);
+                                setCookie(KeyDb.FIRST_USER , true )
+                                // window.scrollTo(0, 0);
                             }}
                         />
                         <div className="quill editor-visualize flex justify-center mobile:px-2">
