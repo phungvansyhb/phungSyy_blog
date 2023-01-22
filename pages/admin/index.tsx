@@ -4,7 +4,12 @@ import Table from '../../components/Table';
 import { AddIcon, DeleteIcon, EditIcon } from '../../assets/icons';
 import { useRouter } from 'next/router';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
-import { getListDocs, deleteDocument } from 'services/fireBase.service';
+import {
+    getListDocs,
+    deleteDocument,
+    writeBatchDoc,
+    WriteBatchParam,
+} from 'services/fireBase.service';
 import { ArchonButton } from 'components';
 import { KeyDb, Post } from 'models/blog';
 import toast from 'react-hot-toast';
@@ -35,7 +40,12 @@ const Page = () => {
     );
     const deletePost = useMutation(
         ({ key }: { key: string }) => {
-            return deleteDocument(KeyDb.POST, [key]);
+            const paramsObj: WriteBatchParam[] = [
+                { type: 'delete', key: KeyDb.POST, customId: key },
+                { type: 'delete', key: KeyDb.POSTDETAIL, customId: key },
+            ];
+            return writeBatchDoc(paramsObj);
+            // return deleteDocument(KeyDb.POST, [key]);
         },
         {
             onSuccess: (_data, { key }) => {

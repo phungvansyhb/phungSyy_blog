@@ -1,25 +1,25 @@
-import React, { useEffect, useMemo, useRef, useState } from "react";
-import { useRouter } from "next/router";
-import { useQuery } from "react-query";
-import { getDetailDoc, getListDocs } from "services/fireBase.service";
-import { KeyDb, Post, ReturnPost } from "models/blog";
-import { BackIcon, BookIcon, CommentIcon, LatestIcon, LoadingIcon } from "assets/icons";
-import { NextPageWithLayout } from "pages/_app";
-import Layout from "components/Layout";
-import Head from "next/head";
-import { BlogItem } from "components/BlogItem";
-import dynamic from "next/dynamic";
-import Link from "next/link";
-import { useCookie } from "hooks/useCookies";
-import { GetStaticPaths, GetStaticProps } from "next";
-import { unified } from "unified";
-import rehypeParse from "rehype-parse";
-import rehypeStringIfy from "rehype-stringify";
-import { visit } from "unist-util-visit";
-import parameterize from "parameterize";
-import { Root } from "rehype-parse/lib";
-import { AnimatePresence, motion } from "framer-motion";
-const Giscus = dynamic(import("@giscus/react"), { ssr: false });
+import React, { useEffect, useMemo, useRef, useState } from 'react';
+import { useRouter } from 'next/router';
+import { useQuery } from 'react-query';
+import { getDetailDoc, getListDocs } from 'services/fireBase.service';
+import { KeyDb, Post, PostDetail, ReturnPost } from 'models/blog';
+import { BackIcon, BookIcon, CommentIcon, LatestIcon, LoadingIcon } from 'assets/icons';
+import { NextPageWithLayout } from 'pages/_app';
+import Layout from 'components/Layout';
+import Head from 'next/head';
+import { BlogItem } from 'components/BlogItem';
+import dynamic from 'next/dynamic';
+import Link from 'next/link';
+import { useCookie } from 'hooks/useCookies';
+import { GetStaticPaths, GetStaticProps } from 'next';
+import { unified } from 'unified';
+import rehypeParse from 'rehype-parse';
+import rehypeStringIfy from 'rehype-stringify';
+import { visit } from 'unist-util-visit';
+import parameterize from 'parameterize';
+import { Root } from 'rehype-parse/lib';
+import { AnimatePresence, motion } from 'framer-motion';
+const Giscus = dynamic(import('@giscus/react'), { ssr: false });
 
 function parseHTML(pageContent: string) {
     let TOC: { id: string; title: string }[] | [] = [];
@@ -27,19 +27,24 @@ function parseHTML(pageContent: string) {
         .use(rehypeParse, { fragment: true })
         .use(() => {
             return (tree: Root) => {
-                visit(tree, "element", (node) => {
-                    if (node.tagName === "h2") {
+                visit(tree, 'element', (node) => {
+                    if (node.tagName === 'h2') {
                         if (node.properties && node.children.length === 1) {
-                            const id = parameterize((node.children[0] as any).value);
+                            let id = '';
+                            try {
+                                id = parameterize((node.children[0] as any).value);
+                            } catch (e) {
+                                id = '';
+                            }
                             node.properties.id = id;
                             TOC = [...TOC, { id, title: (node.children[0] as any).value }];
                             node.children.unshift({
-                                type: "element",
-                                tagName: "a",
+                                type: 'element',
+                                tagName: 'a',
                                 properties: {
                                     href: `#${id}`,
-                                    class: "anchor",
-                                    "aria-hidden": "true",
+                                    class: 'anchor',
+                                    'aria-hidden': 'true',
                                 },
                                 children: [],
                             });
@@ -54,20 +59,20 @@ function parseHTML(pageContent: string) {
     return { toc: TOC, content };
 }
 
-const BlogDetail: NextPageWithLayout = ({ data }: { data: Post }) => {
+const BlogDetail: NextPageWithLayout = ({ data }: { data: PostDetail }) => {
     const router = useRouter();
     const { pid } = router.query;
-    const [theme, _setTheme] = useCookie(KeyDb.APPTHEME, "");
+    const [theme, _setTheme] = useCookie(KeyDb.APPTHEME, '');
     const { content, toc } = useMemo(() => parseHTML(data.content), [data.content]);
     const titleRef = useRef<HTMLDivElement>(null);
     const [showOutline, setShowOutline] = useState(false);
     const { data: relatedPost, isFetching: isFetchingRelated } = useQuery(
-        ["getRelatedPost", pid],
+        ['getRelatedPost', pid],
         async () => {
             const sameCatePost = getListDocs({
                 key: KeyDb.POST,
                 count: 4,
-                whereClause: [["category", "==", data!.category]],
+                whereClause: [['category', '==', data!.category]],
             }) as Promise<ReturnPost[]>;
             return (await sameCatePost).filter((item) => item.id !== pid);
         },
@@ -77,7 +82,7 @@ const BlogDetail: NextPageWithLayout = ({ data }: { data: Post }) => {
     useEffect(() => {
         if (titleRef.current) {
             const observer = new IntersectionObserver(
-                ([e]) => e.target.classList.toggle("title-pinned", e.intersectionRatio < 1),
+                ([e]) => e.target.classList.toggle('title-pinned', e.intersectionRatio < 1),
                 { threshold: [1] }
             );
             observer.observe(titleRef.current);
@@ -85,12 +90,12 @@ const BlogDetail: NextPageWithLayout = ({ data }: { data: Post }) => {
     }, []);
     useEffect(() => {
         function removeOutLine() {
-            if (!titleRef.current?.classList.contains("title-pinned")) {
+            if (!titleRef.current?.classList.contains('title-pinned')) {
                 setShowOutline(false);
             }
         }
-        window.addEventListener("scroll", removeOutLine);
-        return () => window.removeEventListener("scroll", removeOutLine);
+        window.addEventListener('scroll', removeOutLine);
+        return () => window.removeEventListener('scroll', removeOutLine);
     }, [titleRef.current?.classList]);
     function renderRelatedPost() {
         if (isFetchingRelated)
@@ -114,7 +119,7 @@ const BlogDetail: NextPageWithLayout = ({ data }: { data: Post }) => {
             );
         else return <></>;
     }
-    if (typeof data !== "undefined")
+    if (typeof data !== 'undefined')
         return (
             <>
                 <Head>
@@ -125,16 +130,16 @@ const BlogDetail: NextPageWithLayout = ({ data }: { data: Post }) => {
                 </Head>
                 <div className="px-6 mobile:px-4 py-12 mobile:py-8 h-main-content dark:bgc-dark">
                     {/* <div className="h-40 fixed top-0">{data.title}</div> */}
-                    <Link href={"/"} className='inline-block'>
+                    <Link href={'/'} className="inline-block">
                         <BackIcon className="w-8 h-8" />
                     </Link>
                     <AnimatePresence>
                         {showOutline && (
                             <motion.aside
-                                initial={{ x: "100%" }}
-                                transition={{ duration: 0.5, type: "spring" }}
+                                initial={{ x: '100%' }}
+                                transition={{ duration: 0.5, type: 'spring' }}
                                 animate={{ x: 0 }}
-                                exit={{ x: "100%" }}
+                                exit={{ x: '100%' }}
                                 key="outline"
                                 className="fixed right-0 top-[100px] mobile:top-[70px] bg-white dark:bgc-dark rounded-lg 
                                 shadow px-4 py-8 min-w-[350px] w-1/3 overflow-hidden border z-[200] 
@@ -196,7 +201,7 @@ const BlogDetail: NextPageWithLayout = ({ data }: { data: Post }) => {
                             loading="lazy"
                         />
                     </div>
-                    <div className="related">{renderRelatedPost()}</div>
+                    <div className="related mt-10">{renderRelatedPost()}</div>
                 </div>
             </>
         );
@@ -206,13 +211,20 @@ const BlogDetail: NextPageWithLayout = ({ data }: { data: Post }) => {
 export const getStaticPaths: GetStaticPaths<{ slug: string }> = async () => {
     return {
         paths: [], //indicates that no page needs be created at build time
-        fallback: "blocking", //indicates the type of fallback
+        fallback: 'blocking', //indicates the type of fallback
     };
 };
 export const getStaticProps: GetStaticProps = async (context) => {
     const pid = context.params!.pid;
-    const post = await (getDetailDoc(KeyDb.POST, [pid as string]) as Promise<Post | undefined>);
-    return { props: { data: { ...post } } };
+    const content = await (getDetailDoc(KeyDb.POSTDETAIL, [pid as string]) as Promise<
+        { content: string } | undefined
+    >);
+    const metaData = await (getDetailDoc(KeyDb.POST, [pid as string]) as Promise<Post | undefined>);
+    if (typeof metaData !== 'undefined') {
+        const { updateAt, ...rest } = metaData;
+        return { props: { data: { ...content, ...rest } } };
+    }
+    return { props: { data: { ...content } } };
 };
 
 BlogDetail.getLayout = function (page: React.ReactElement) {

@@ -1,22 +1,28 @@
-import React, { FormEvent, Ref } from "react";
-import toast from "react-hot-toast";
-import { useQueryClient, useQuery, useMutation } from "react-query";
-import { GroupBase } from "react-select";
-import CreatableSelect from "react-select/creatable";
-import Select from "react-select/dist/declarations/src/Select";
-import { getListDocs, createDoc, updateDocument } from "../services/fireBase.service";
-import { Post, KeyDb } from "models/blog";
-import Editor from "components/Editor";
-import { useEffect } from "react";
-import { useRouter } from "next/router";
-import { LoadingIcon } from "assets/icons";
-import { toSlug } from "utils/toSlug";
+import React, { FormEvent, Ref } from 'react';
+import toast from 'react-hot-toast';
+import { useQueryClient, useQuery, useMutation } from 'react-query';
+import { GroupBase } from 'react-select';
+import CreatableSelect from 'react-select/creatable';
+import Select from 'react-select/dist/declarations/src/Select';
+import {
+    getListDocs,
+    createDoc,
+    updateDocument,
+    writeBatchDoc,
+    WriteBatchParam,
+} from '../services/fireBase.service';
+import { Post, KeyDb } from 'models/blog';
+import Editor from 'components/Editor';
+import { useEffect } from 'react';
+import { useRouter } from 'next/router';
+import { LoadingIcon } from 'assets/icons';
+import { toSlug } from 'utils/toSlug';
 
-type Props = { isEdit: boolean; initPost?: Post };
+type Props = { isEdit: boolean; initPost?: Post & { content: string } };
 
 export const PageEditor = ({ isEdit, initPost }: Props) => {
     const [content, setContent] = React.useState(initPost?.content);
-    const [defaultSelected, setDefaultSelected] = React.useState({ value: "", label: "" });
+    const [defaultSelected, setDefaultSelected] = React.useState({ value: '', label: '' });
     const titleRef = React.useRef<HTMLInputElement>(null);
     const publicRef = React.useRef<HTMLInputElement>(null);
     const descriptionRef = React.useRef<HTMLTextAreaElement>(null);
@@ -25,94 +31,118 @@ export const PageEditor = ({ isEdit, initPost }: Props) => {
     const router = useRouter();
     const { pid } = router.query;
     const { data, isLoading } = useQuery(
-        "getListCate",
+        'getListCate',
         () => getListDocs({ key: KeyDb.CATEGORY }),
         {
             placeholderData: [],
         }
     );
     const createCategory = useMutation(
-        "createMutation",
+        'createMutation',
         (cateName: string) => createDoc(KeyDb.CATEGORY, { name: cateName }),
         {
             onSuccess: (_idCreated, variable) => {
                 if (Array.isArray(data)) {
-                    queryClient.setQueryData("getListCate", [...data, { name: variable }]);
+                    queryClient.setQueryData('getListCate', [...data, { name: variable }]);
                 }
                 console.log(data, variable);
             },
         }
     );
     const createPost = useMutation(
-        ({ post }: { post: Post }) => {
-            return createDoc(KeyDb.POST, post , toSlug(post.title));
+        ({ post }: { post: Post & { content: string } }) => {
+            const { content, ...rest } = post;
+            const paramObj: WriteBatchParam[] = [
+                {
+                    type: 'set',
+                    data: { content },
+                    key: KeyDb.POSTDETAIL,
+                    customId: toSlug(post.title),
+                },
+                { type: 'set', data: rest, key: KeyDb.POST, customId: toSlug(post.title) },
+            ];
+            return writeBatchDoc(paramObj);
+            // return createDoc(KeyDb.POST, post, toSlug(post.title));
         },
         {
             onSuccess: () => {
-                toast.success("Tạo bài viết thành công");
-                router.push('/admin')
-
+                toast.success('Tạo bài viết thành công');
+                router.push('/admin');
             },
             onError: () => {
-                toast.error("Tạo bài viết thất bại");
+                toast.error('Tạo bài viết thất bại');
             },
         }
     );
     const updatePost = useMutation(
-        ({ post }: { post: Post }) => {
-            return updateDocument(KeyDb.POST, post, [pid as string]);
+        ({ post }: { post: Post  & { content: string }  }) => {
+            const { content, ...rest } = post;
+            const paramObj: WriteBatchParam[] = [
+                {
+                    type: 'update',
+                    data: { content },
+                    key: KeyDb.POSTDETAIL,
+                    customId: pid as string,
+                },
+                { type: 'update', data: rest, key: KeyDb.POST, customId: pid as string },
+            ];
+            return writeBatchDoc(paramObj);
+            // return updateDocument(KeyDb.POST, post, [pid as string]);
         },
         {
             onSuccess: () => {
-                toast.success("Update bài viết thành công");
-                router.push('/admin')
+                toast.success('Update bài viết thành công');
+                router.push('/admin');
             },
             onError: () => {
-                toast.error("Update bài viết thất bại");
+                toast.error('Update bài viết thất bại');
             },
         }
     );
     function handleSave(e: FormEvent) {
         e.preventDefault();
         const title = titleRef.current ? titleRef.current.value : initPost?.title;
-        const isPublic = publicRef.current ? publicRef.current.checked : (initPost?.isPublic||false)
+        const isPublic = publicRef.current
+            ? publicRef.current.checked
+            : initPost?.isPublic || false;
         const description = descriptionRef.current
             ? descriptionRef.current.value
             : initPost?.description;
         const category = (selectRef.current as any).getValue();
         const postObj = isEdit ? { ...initPost } : {};
         if (!title) {
-            toast.error("title required !");
+            toast.error('title required !');
             titleRef.current!.focus();
             return;
         }
         if (category.length === 0) {
-            toast.error("category required !");
+            toast.error('category required !');
             (selectRef.current as any).focus();
             return;
         }
         if (!description) {
-            toast.error("description required !");
+            toast.error('description required !');
             descriptionRef.current!.focus();
             return;
         }
         if (!content) {
-            toast.error("content required !");
+            toast.error('content required !');
             return;
         }
         const finalObj = {
             ...postObj,
             title: title,
-            isPublic : isPublic,
+            isPublic: isPublic,
             category: category[0].value,
             description: description,
             content: content,
+            path : KeyDb.POSTDETAIL + toSlug(title),
             updateAt: new Date(),
         };
         isEdit
             ? updatePost.mutate({ post: finalObj })
             : createPost.mutate({
-                  post: finalObj,
+                  post: {...finalObj, isDeleted : false},
               });
     }
     function handleCreateCate(inputValue: string) {
@@ -142,7 +172,11 @@ export const PageEditor = ({ isEdit, initPost }: Props) => {
                 </div>
                 <div className="flex gap-4">
                     <span>Public bài viết:</span>
-                    <input type="checkbox" ref={publicRef} defaultChecked={initPost?.isPublic}></input>
+                    <input
+                        type="checkbox"
+                        ref={publicRef}
+                        defaultChecked={initPost?.isPublic}
+                    ></input>
                 </div>
 
                 <div>
@@ -162,7 +196,7 @@ export const PageEditor = ({ isEdit, initPost }: Props) => {
                             // inputValue = {defaultValue?.category}
                         />
                     ) : (
-                        "loading"
+                        'loading'
                     )}
                 </div>
                 <div className="flex flex-col gap-2">
@@ -189,7 +223,7 @@ export const PageEditor = ({ isEdit, initPost }: Props) => {
                 <div className="flex justify-center mt-6 gap-6">
                     <button className="btn btn-primary flex items-center gap-4" type="submit">
                         {createPost.isLoading ||
-                            (updatePost.isLoading && <LoadingIcon className="w-6 h-6" />)}{" "}
+                            (updatePost.isLoading && <LoadingIcon className="w-6 h-6" />)}{' '}
                         Save
                     </button>
                     <button

@@ -7,19 +7,19 @@ import Link from 'next/link';
 
 export const BlogItem = ({
     category,
-    content,
     title,
     updateAt,
     type,
     id,
     description,
+    path
 }: ReturnPost & {
     type: 'slide' | 'all' | 'related';
 }) => {
     const router = useRouter();
     function navigateDetail() {
         router.push({
-            pathname: '/blog/' + id,
+            pathname: '/' + path,
         });
     }
     return (
@@ -38,7 +38,7 @@ export const BlogItem = ({
             <Link
                 className="text-sub-header  dark:text-white cursor-pointer 
                     first-letter:uppercase"
-                href={`/blog/` + id}
+                href={"/"+path}
             >
                 {title}
             </Link>
