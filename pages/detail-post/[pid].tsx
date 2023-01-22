@@ -20,6 +20,8 @@ import parameterize from 'parameterize';
 import { Root } from 'rehype-parse/lib';
 import { AnimatePresence, motion } from 'framer-motion';
 const Giscus = dynamic(import('@giscus/react'), { ssr: false });
+import 'intro.js/introjs.css';
+import { Steps } from 'intro.js-react';
 
 function parseHTML(pageContent: string) {
     let TOC: { id: string; title: string }[] | [] = [];
@@ -66,6 +68,16 @@ const BlogDetail: NextPageWithLayout = ({ data }: { data: PostDetail }) => {
     const { content, toc } = useMemo(() => parseHTML(data.content), [data.content]);
     const titleRef = useRef<HTMLDivElement>(null);
     const [showOutline, setShowOutline] = useState(false);
+    const [stepEnable, setEnableStep] = useState(false);
+    const [initStep] = useState(0);
+    const [countIntro, setCountIntro] = useState(0);
+    const [steps] = useState([
+        {
+            element: '.outlineBtn',
+            intro: 'Click để xem mục lục',
+        },
+    ]);
+
     const { data: relatedPost, isFetching: isFetchingRelated } = useQuery(
         ['getRelatedPost', pid],
         async () => {
@@ -82,7 +94,9 @@ const BlogDetail: NextPageWithLayout = ({ data }: { data: PostDetail }) => {
     useEffect(() => {
         if (titleRef.current) {
             const observer = new IntersectionObserver(
-                ([e]) => e.target.classList.toggle('title-pinned', e.intersectionRatio < 1),
+                ([e]) => {
+                    e.target.classList.toggle('title-pinned', e.intersectionRatio < 1);
+                },
                 { threshold: [1] }
             );
             observer.observe(titleRef.current);
@@ -90,13 +104,18 @@ const BlogDetail: NextPageWithLayout = ({ data }: { data: PostDetail }) => {
     }, []);
     useEffect(() => {
         function removeOutLine() {
+            if (countIntro === 0 && titleRef.current?.classList.contains('title-pinned')) {
+                setEnableStep(true);
+            }
             if (!titleRef.current?.classList.contains('title-pinned')) {
                 setShowOutline(false);
+                setEnableStep(false);
             }
         }
         window.addEventListener('scroll', removeOutLine);
         return () => window.removeEventListener('scroll', removeOutLine);
     }, [titleRef.current?.classList]);
+
     function renderRelatedPost() {
         if (isFetchingRelated)
             return (
@@ -130,7 +149,7 @@ const BlogDetail: NextPageWithLayout = ({ data }: { data: PostDetail }) => {
                 </Head>
                 <div className="px-6 mobile:px-4 py-12 mobile:py-8 h-main-content dark:bgc-dark">
                     {/* <div className="h-40 fixed top-0">{data.title}</div> */}
-                    <Link href={'/'} className="inline-block">
+                    <Link href={'/'} className="inline-block backbutton">
                         <BackIcon className="w-8 h-8" />
                     </Link>
                     <AnimatePresence>
@@ -168,10 +187,29 @@ const BlogDetail: NextPageWithLayout = ({ data }: { data: PostDetail }) => {
                         >
                             {data.title}
                             <button onClick={() => setShowOutline(!showOutline)}>
-                                <BookIcon className="w-8 h-8 hidden" />
+                                <BookIcon className="w-8 h-8 hidden outlineBtn" />
                             </button>
                         </h1>
-
+                        <Steps
+                            enabled={stepEnable && countIntro === 0}
+                            steps={steps}
+                            initialStep={initStep}
+                            options={{
+                                overlayOpacity: 0.7,
+                                doneLabel: 'Đã hiểu',
+                                hidePrev: true,
+                                tooltipClass: 'sticky',
+                                showBullets: false,
+                            }}
+                            onExit={() => {
+                                setEnableStep(false);
+                            }}
+                            onComplete={() => {
+                                setEnableStep(false);
+                                setCountIntro(1);
+                                window.scrollTo(0, 0);
+                            }}
+                        />
                         <div className="quill editor-visualize flex justify-center mobile:px-2">
                             <div className="ql-container ql-snow ql-disabled ">
                                 <article

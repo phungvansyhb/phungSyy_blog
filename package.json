@@ -23,6 +23,8 @@
     "eslint-config-next": "13.1.0",
     "firebase": "^9.13.0",
     "framer-motion": "^8.0.2",
+    "intro.js": "^6.0.0",
+    "intro.js-react": "^0.7.1",
     "next": "13.1.0",
     "nprogress": "^0.2.0",
     "parameterize": "^1.0.0",
