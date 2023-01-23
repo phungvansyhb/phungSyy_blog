@@ -1,5 +1,6 @@
 import { initializeApp } from "firebase/app";
 import { getFirestore } from "firebase/firestore";
+import { getStorage , ref } from "firebase/storage";
 
 const firebaseConfig = {
     apiKey: "AIzaSyASbuxln7HczuZWP-1cYYFbDKwMeXAnu4I",
@@ -15,4 +16,5 @@ const firebaseConfig = {
 }
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
-export { db }
+const storageRef =(fileName:string)=> ref(getStorage(app),'my-blog/'+fileName);
+export { db , storageRef }
