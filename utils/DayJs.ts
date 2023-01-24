@@ -4,9 +4,9 @@ import relativeTime from 'dayjs/plugin/relativeTime'
 
 dayjs.locale('vi')
 dayjs.extend(relativeTime)
-export function convertTimestampFirebase(date: { seconds: number, nanoseconds: number }) {
+export function convertTimestampFirebase({ date, format }: { date: { seconds: number, nanoseconds: number }, format?: string }) {
     return dayjs(
         new Date(date.seconds * 1000 + date.nanoseconds / 1000000)
-    ).format("dddd ngày DD-MM-YYYY")
+    ).format(format || "dddd, DD [thg] MM-YYYY")
 }
 export default dayjs

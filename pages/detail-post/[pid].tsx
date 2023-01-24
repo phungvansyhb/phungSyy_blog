@@ -154,11 +154,14 @@ const BlogDetail: NextPageWithLayout = ({ data }: { data: PostDetail }) => {
                     <meta name="title" content={data.title} />
                     <meta name="language" content="VI" />
                     <meta property="og:type" content="blog , technical post" />
-                    <meta property='og:image' content = {data.avatar}/>
+                    <meta property="og:image" content={data.avatar} />
                     <meta
                         name="description"
                         content={
-                            convertTimestampFirebase(data.createAt) +
+                            convertTimestampFirebase({
+                                date: data.createAt,
+                                format: 'DD [thg] mm, YYYY',
+                            }) +
                             '-' +
                             data.description
                         }
@@ -233,8 +236,11 @@ const BlogDetail: NextPageWithLayout = ({ data }: { data: PostDetail }) => {
                             }}
                         />
                         <div className="text-xs font-light italic text-right mr-20">
-                            Tạo lúc {convertTimestampFirebase(data.createAt)}, Cập
-                            nhật gần nhất {convertTimestampFirebase(data.updateAt)}
+                            Tạo lúc{' '}
+                            {convertTimestampFirebase({
+                                date: data.createAt,
+                            })}
+                            , Cập nhật gần nhất {convertTimestampFirebase({ date: data.updateAt })}
                         </div>
                         <div className="quill editor-visualize flex justify-center mobile:px-2">
                             <div className="ql-container ql-snow ql-disabled ">
