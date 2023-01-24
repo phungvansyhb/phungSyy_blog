@@ -2,16 +2,23 @@
 export type Post = {
     id?: string
     title: string;
+    avatar:string;
     path: string;
     description: string;
     category: string;
     updateAt: Date;
+    createAt: Date;
     isDeleted?: boolean;
     isPublic: boolean
 };
-export type ReturnPost = Omit<Post, "updateAt"> & { updateAt: { seconds: number, nanoseconds: number } }
+type TimeStamp = {
+    seconds: number, nanoseconds: number
+}
+export type ReturnPost = Omit<Post, "updateAt"|"createAt"> & { updateAt: TimeStamp , createAt : TimeStamp }
 export type PostDetail = Post & {
-    content: string
+    content: string,
+    updateAt: TimeStamp ,
+    createAt : TimeStamp
 }
 export enum KeyDb {
     POST = 'posts',

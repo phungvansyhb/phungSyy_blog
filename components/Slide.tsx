@@ -14,7 +14,7 @@ export default function Slide({}: Props) {
         () =>
             getListDocs({
                 key: KeyDb.POST,
-                orderKey: 'updateAt',
+                orderKey: 'createAt',
                 count: 5,
                 whereClause: [['isPublic', '==', true]],
                 orderDirection: 'desc',

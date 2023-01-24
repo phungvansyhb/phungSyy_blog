@@ -22,7 +22,9 @@ import { AnimatePresence, motion } from 'framer-motion';
 const Giscus = dynamic(import('@giscus/react'), { ssr: false });
 import 'intro.js/introjs.css';
 import { Steps } from 'intro.js-react';
-import { setCookie , getCookie} from 'cookies-next'
+import { setCookie, getCookie } from 'cookies-next';
+import dayjs from 'dayjs';
+import { convertTimestampFirebase } from 'utils/DayJs';
 
 function parseHTML(pageContent: string) {
     let TOC: { id: string; title: string }[] | [] = [];
@@ -72,7 +74,7 @@ const BlogDetail: NextPageWithLayout = ({ data }: { data: PostDetail }) => {
     const [stepEnable, setEnableStep] = useState(false);
     const [initStep] = useState(0);
     const [countIntro, setCountIntro] = useState(0);
-    const isAlreadyView = getCookie(KeyDb.FIRST_USER)
+    const isAlreadyView = getCookie(KeyDb.FIRST_USER);
     const [steps] = useState([
         {
             element: '.outlineBtn',
@@ -106,7 +108,11 @@ const BlogDetail: NextPageWithLayout = ({ data }: { data: PostDetail }) => {
     }, []);
     useEffect(() => {
         function removeOutLine() {
-            if (countIntro === 0 && !isAlreadyView && titleRef.current?.classList.contains('title-pinned')) {
+            if (
+                countIntro === 0 &&
+                !isAlreadyView &&
+                titleRef.current?.classList.contains('title-pinned')
+            ) {
                 setEnableStep(true);
             }
             if (!titleRef.current?.classList.contains('title-pinned')) {
@@ -145,9 +151,20 @@ const BlogDetail: NextPageWithLayout = ({ data }: { data: PostDetail }) => {
             <>
                 <Head>
                     <title>{data.title}</title>
-                    <meta name="description" content={data.description} />
+                    <meta name="title" content={data.title} />
+                    <meta name="language" content="VI" />
+                    <meta property="og:type" content="blog , technical post" />
+                    <meta property='og:image' content = {data.avatar}/>
+                    <meta
+                        name="description"
+                        content={
+                            convertTimestampFirebase(data.createAt) +
+                            '-' +
+                            data.description
+                        }
+                    />
                     <meta name="viewport" content="width=device-width, initial-scale=1" />
-                    <link rel="icon" href="/medal.svg" />
+                    <link rel="icon" href="/blog.svg" />
                 </Head>
                 <div className="px-6 mobile:px-4 py-12 mobile:py-8 h-main-content dark:bgc-dark">
                     {/* <div className="h-40 fixed top-0">{data.title}</div> */}
@@ -209,10 +226,16 @@ const BlogDetail: NextPageWithLayout = ({ data }: { data: PostDetail }) => {
                             onComplete={() => {
                                 setEnableStep(false);
                                 setCountIntro(1);
-                                setCookie(KeyDb.FIRST_USER , true )
+                                setCookie(KeyDb.FIRST_USER, true, {
+                                    expires: dayjs(new Date()).add(10).toDate(),
+                                });
                                 // window.scrollTo(0, 0);
                             }}
                         />
+                        <div className="text-xs font-light italic text-right mr-20">
+                            Tạo lúc {convertTimestampFirebase(data.createAt)}, Cập
+                            nhật gần nhất {convertTimestampFirebase(data.updateAt)}
+                        </div>
                         <div className="quill editor-visualize flex justify-center mobile:px-2">
                             <div className="ql-container ql-snow ql-disabled ">
                                 <article
@@ -260,10 +283,12 @@ export const getStaticProps: GetStaticProps = async (context) => {
     const content = await (getDetailDoc(KeyDb.POSTDETAIL, [pid as string]) as Promise<
         { content: string } | undefined
     >);
-    const metaData = await (getDetailDoc(KeyDb.POST, [pid as string]) as Promise<Post | undefined>);
+    const metaData = await (getDetailDoc(KeyDb.POST, [pid as string]) as Promise<
+        ReturnPost | undefined
+    >);
     if (typeof metaData !== 'undefined') {
-        const { updateAt, ...rest } = metaData;
-        return { props: { data: { ...content, ...rest } } };
+        // const { updateAt, createAt, ...rest } = metaData;
+        return { props: { data: JSON.parse(JSON.stringify({ ...content, ...metaData })) } };
     }
     return { props: { data: { ...content } } };
 };

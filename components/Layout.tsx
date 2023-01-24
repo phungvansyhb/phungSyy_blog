@@ -52,6 +52,9 @@ export default function Layout({ children, metaObject, removeStickyHeader }: Pro
                     <title>{metaObject.title}</title>
                     <meta name="description" content={metaObject.description} />
                     <meta name="viewport" content="width=device-width, initial-scale=1" />
+                    <meta name="author" content="Sỹ PV" />
+                    <meta name="language" content = "VI"/>
+                    <meta name="reply-to" content = "phungvansyhb@gmail.com"/>
                     <link rel="icon" href="/medal.svg" />
                 </Head>
             )}

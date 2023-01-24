@@ -10,6 +10,7 @@ import {
     updateDocument,
     writeBatchDoc,
     WriteBatchParam,
+    uploadImageAndReturnUrl,
 } from '../services/fireBase.service';
 import { Post, KeyDb } from 'models/blog';
 import Editor from 'components/Editor';
@@ -17,14 +18,19 @@ import { useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { LoadingIcon } from 'assets/icons';
 import { toSlug } from 'utils/toSlug';
+import Upload from './Upload';
+import { ImageType } from 'react-images-uploading';
 
 type Props = { isEdit: boolean; initPost?: Post & { content: string } };
 
+const ImageAvatarUrl =
+    'https://www.trio.dev/hubfs/Imported_Blog_Media/263a75529a1752b75d64f9f21fd07c92-3-2.jpg';
 export const PageEditor = ({ isEdit, initPost }: Props) => {
     const [content, setContent] = React.useState(initPost?.content);
     const [defaultSelected, setDefaultSelected] = React.useState({ value: '', label: '' });
     const titleRef = React.useRef<HTMLInputElement>(null);
     const publicRef = React.useRef<HTMLInputElement>(null);
+    const [avatar, setAvatar] = React.useState<ImageType[] | []>([]);
     const descriptionRef = React.useRef<HTMLTextAreaElement>(null);
     const selectRef = React.useRef<Ref<Select<string, false, GroupBase<string>>> | undefined>(null);
     const queryClient = useQueryClient();
@@ -75,7 +81,7 @@ export const PageEditor = ({ isEdit, initPost }: Props) => {
         }
     );
     const updatePost = useMutation(
-        ({ post }: { post: Post  & { content: string }  }) => {
+        ({ post }: { post: Partial<Post> & { content: string } }) => {
             const { content, ...rest } = post;
             const paramObj: WriteBatchParam[] = [
                 {
@@ -99,7 +105,7 @@ export const PageEditor = ({ isEdit, initPost }: Props) => {
             },
         }
     );
-    function handleSave(e: FormEvent) {
+    async function handleSave(e: FormEvent) {
         e.preventDefault();
         const title = titleRef.current ? titleRef.current.value : initPost?.title;
         const isPublic = publicRef.current
@@ -129,20 +135,25 @@ export const PageEditor = ({ isEdit, initPost }: Props) => {
             toast.error('content required !');
             return;
         }
+        let urlAvatar = initPost ? initPost.avatar : ImageAvatarUrl;
+        if (avatar.length !== 0) {
+            urlAvatar = await uploadImageAndReturnUrl(avatar[0].file!);
+        }
         const finalObj = {
             ...postObj,
+            avatar: urlAvatar,
             title: title,
             isPublic: isPublic,
             category: category[0].value,
             description: description,
             content: content,
-            path : KeyDb.POSTDETAIL + toSlug(title),
+            path: KeyDb.POSTDETAIL +"/"+ toSlug(title),
             updateAt: new Date(),
         };
         isEdit
             ? updatePost.mutate({ post: finalObj })
             : createPost.mutate({
-                  post: {...finalObj, isDeleted : false},
+                  post: { ...finalObj, isDeleted: false, createAt: new Date() },
               });
     }
     function handleCreateCate(inputValue: string) {
@@ -169,6 +180,18 @@ export const PageEditor = ({ isEdit, initPost }: Props) => {
                         ref={titleRef}
                         defaultValue={initPost?.title}
                     />
+                </div>
+                <div className="flex gap-4">
+                    <span>Ảnh đại diện bài viết: </span>
+                    <Upload
+                        getImageCallback={setAvatar}
+                        defaultImage={initPost ? initPost.avatar : undefined}
+                    />
+                    {/* <input
+                        type="file"
+                        accept="image/*"
+                        ref={avatarRef}
+                    ></input> */}
                 </div>
                 <div className="flex gap-4">
                     <span>Public bài viết:</span>
@@ -231,7 +254,7 @@ export const PageEditor = ({ isEdit, initPost }: Props) => {
                         type="button"
                         onClick={() => router.back()}
                     >
-                        Cancel
+                        Home
                     </button>
                 </div>
             </form>

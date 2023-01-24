@@ -21,7 +21,10 @@ import BackIcon from "./BackIcon";
 import CommentIcon from "./CommentIcon";
 import BookIcon from "./BookIcon";
 import EmailIcon from "./EmailIcon";
+import UploadIcon from "./UploadIcon";
+
 export {
+    UploadIcon,
     EmailIcon,
     BookIcon,
     CommentIcon,

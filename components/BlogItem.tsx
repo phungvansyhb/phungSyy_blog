@@ -2,17 +2,18 @@ import { ReadMoreIcon } from 'assets/icons';
 import { ReturnPost } from 'models/blog';
 import React from 'react';
 import { useRouter } from 'next/router';
-import dayjs from 'utils/DayJs';
+import  { convertTimestampFirebase } from 'utils/DayJs';
 import Link from 'next/link';
 
 export const BlogItem = ({
     category,
     title,
     updateAt,
+    createAt,
     type,
     id,
     description,
-    path
+    path,
 }: ReturnPost & {
     type: 'slide' | 'all' | 'related';
 }) => {
@@ -30,15 +31,12 @@ export const BlogItem = ({
              bg-white dark:bgc-deep-dark 
                rounded-lg py-3 px-6 flex flex-col gap-3 ${type === 'slide' && 'mx-4'}`}
         >
-            <div className="text-info dark:text-white">
-                {dayjs(
-                    new Date(updateAt.seconds * 1000 + updateAt.nanoseconds / 1000000)
-                ).fromNow()}
-            </div>
+            <div className="text-info dark:text-white">{convertTimestampFirebase(createAt)}</div>
+
             <Link
                 className="text-sub-header  dark:text-white cursor-pointer 
                     first-letter:uppercase"
-                href={"/"+path}
+                href={'/' + path}
             >
                 {title}
             </Link>
