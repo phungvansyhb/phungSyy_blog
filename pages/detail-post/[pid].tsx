@@ -160,7 +160,7 @@ const BlogDetail: NextPageWithLayout = ({ data }: { data: PostDetail }) => {
                         content={
                             convertTimestampFirebase({
                                 date: data.createAt,
-                                format: 'DD [thg] mm, YYYY',
+                                format: 'DD [thg] MM, YYYY',
                             }) +
                             '-' +
                             data.description
@@ -222,7 +222,9 @@ const BlogDetail: NextPageWithLayout = ({ data }: { data: PostDetail }) => {
                                 hidePrev: true,
                                 tooltipClass: 'sticky',
                                 showBullets: false,
+                                
                             }}
+
                             onExit={() => {
                                 setEnableStep(false);
                             }}
@@ -230,12 +232,11 @@ const BlogDetail: NextPageWithLayout = ({ data }: { data: PostDetail }) => {
                                 setEnableStep(false);
                                 setCountIntro(1);
                                 setCookie(KeyDb.FIRST_USER, true, {
-                                    expires: dayjs(new Date()).add(10).toDate(),
+                                    expires : dayjs().add(10,'day').toDate()
                                 });
-                                // window.scrollTo(0, 0);
                             }}
                         />
-                        <div className="text-xs font-light italic text-right mr-20">
+                        <div className="text-xs font-light italic text-right">
                             Tạo lúc{' '}
                             {convertTimestampFirebase({
                                 date: data.createAt,

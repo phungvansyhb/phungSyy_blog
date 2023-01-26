@@ -28,10 +28,21 @@ body {
   -ms-border-radius: 2px;
   -o-border-radius: 2px;
 }
-*::selection{
-  color : white;
+
+*::selection {
+  color: white;
   background-color: #EC5990;
 }
+
+.introjs-button {
+  padding: 4px 8px !important;
+  background-color: #EC5990 !important;
+  color: white !important;
+  outline: none !important;
+  border: none !important;
+  text-shadow: none !important;
+}
+
 /* quill editor override css */
 .post-content {
   font-family: Arial, Helvetica, sans-serif;
@@ -72,6 +83,7 @@ body {
   h2 {
     margin-top: 10px;
     margin-bottom: 10px;
+
     &::first-letter {
       @extend .tranformFirstLetter
     }
@@ -138,26 +150,27 @@ body {
 }
 
 @keyframes wavehand {
-  0%{
+  0% {
     transform: rotate(-5deg);
     -webkit-transform: rotate(-5deg);
     -moz-transform: rotate(-5deg);
     -ms-transform: rotate(-5deg);
     -o-transform: rotate(-5deg);
-}
-  100%{
+  }
+
+  100% {
     transform: rotate(25deg);
     -webkit-transform: rotate(25deg);
     -moz-transform: rotate(25deg);
     -ms-transform: rotate(25deg);
     -o-transform: rotate(25deg);
-}
+  }
 
 }
 
-.wave{
-  animation: wavehand 0.68s ease-out 0s infinite alternate ;
-  -webkit-animation: wavehand 0.68s ease-out 0s infinite alternate ;
+.wave {
+  animation: wavehand 0.68s ease-out 0s infinite alternate;
+  -webkit-animation: wavehand 0.68s ease-out 0s infinite alternate;
 }
 
 /* when display for user add .editor-visualize class */
@@ -193,13 +206,13 @@ body {
 }
 
 .ql-align-center {
-//   img{
-//     transform: translateX(33%);
-//     -webkit-transform: translateX(33%);
-//     -moz-transform: translateX(33%);
-//     -ms-transform: translateX(33%);
-//     -o-transform: translateX(33%);
-// }
+  //   img{
+  //     transform: translateX(33%);
+  //     -webkit-transform: translateX(33%);
+  //     -moz-transform: translateX(33%);
+  //     -ms-transform: translateX(33%);
+  //     -o-transform: translateX(33%);
+  // }
   display: grid;
   text-align: center;
   justify-content: center;
@@ -249,9 +262,10 @@ body {
 }
 
 @layer components {
-  .page-container{
+  .page-container {
     @apply px-[120px] tablet:px-[40px] mobile:px-4
   }
+
   .title-pinned {
     background-color: white;
     font-size: 20px !important;
@@ -263,6 +277,7 @@ body {
     -moz-transition: all;
     -ms-transition: all;
     -o-transition: all;
+
     svg {
       display: block;
       cursor: pointer;
