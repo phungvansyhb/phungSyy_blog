@@ -1,30 +1,33 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react';
-import { useRouter } from 'next/router';
-import { useQuery } from 'react-query';
-import { getDetailDoc, getListDocs } from 'services/fireBase.service';
-import { KeyDb, Post, PostDetail, ReturnPost } from 'models/blog';
+import 'intro.js/introjs.css';
+
+import { AnimatePresence, motion } from 'framer-motion';
 import { BackIcon, BookIcon, CommentIcon, LatestIcon, LoadingIcon } from 'assets/icons';
-import { NextPageWithLayout } from 'pages/_app';
-import Layout from 'components/Layout';
-import Head from 'next/head';
-import { BlogItem } from 'components/BlogItem';
-import dynamic from 'next/dynamic';
-import Link from 'next/link';
-import { useCookie } from 'hooks/useCookies';
 import { GetStaticPaths, GetStaticProps } from 'next';
-import { unified } from 'unified';
+import { KeyDb, Post, PostDetail, ReturnPost } from 'models/blog';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
+import { getCookie, setCookie } from 'cookies-next';
+import { getDetailDoc, getListDocs } from 'services/fireBase.service';
+
+import { BlogItem } from 'components/BlogItem';
+import Head from 'next/head';
+import Layout from 'components/Layout';
+import Link from 'next/link';
+import { NextPageWithLayout } from 'pages/_app';
+import { Root } from 'rehype-parse/lib';
+import { Steps } from 'intro.js-react';
+import { convertTimestampFirebase } from 'utils/DayJs';
+import dayjs from 'dayjs';
+import dynamic from 'next/dynamic';
+import parameterize from 'parameterize';
 import rehypeParse from 'rehype-parse';
 import rehypeStringIfy from 'rehype-stringify';
+import { unified } from 'unified';
+import { useCookie } from 'hooks/useCookies';
+import { useQuery } from 'react-query';
+import { useRouter } from 'next/router';
 import { visit } from 'unist-util-visit';
-import parameterize from 'parameterize';
-import { Root } from 'rehype-parse/lib';
-import { AnimatePresence, motion } from 'framer-motion';
+
 const Giscus = dynamic(import('@giscus/react'), { ssr: false });
-import 'intro.js/introjs.css';
-import { Steps } from 'intro.js-react';
-import { setCookie, getCookie } from 'cookies-next';
-import dayjs from 'dayjs';
-import { convertTimestampFirebase } from 'utils/DayJs';
 
 function parseHTML(pageContent: string) {
     let TOC: { id: string; title: string }[] | [] = [];
@@ -137,7 +140,7 @@ const BlogDetail: NextPageWithLayout = ({ data }: { data: PostDetail }) => {
                     <h2 className="text-sub-header text-primary flex gap-4 items-center">
                         Related post <LatestIcon className="w-6 h-6" />
                     </h2>
-                    <div className="px-8 pt-6">
+                    <div className="px-8 tablet:px-4 mobile:px-2 pt-6 flex overflow-x-auto tablet:flex-col mobile:flex-col gap-4">
                         {relatedPost.map((related, index) => (
                             <BlogItem key={index} {...related} type="related" />
                         ))}
@@ -222,9 +225,7 @@ const BlogDetail: NextPageWithLayout = ({ data }: { data: PostDetail }) => {
                                 hidePrev: true,
                                 tooltipClass: 'sticky',
                                 showBullets: false,
-                                
                             }}
-
                             onExit={() => {
                                 setEnableStep(false);
                             }}
@@ -232,7 +233,7 @@ const BlogDetail: NextPageWithLayout = ({ data }: { data: PostDetail }) => {
                                 setEnableStep(false);
                                 setCountIntro(1);
                                 setCookie(KeyDb.FIRST_USER, true, {
-                                    expires : dayjs().add(10,'day').toDate()
+                                    expires: dayjs().add(10, 'day').toDate(),
                                 });
                             }}
                         />
