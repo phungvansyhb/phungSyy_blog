@@ -1,9 +1,9 @@
+import Link from 'next/link';
+import React from 'react';
 import { ReadMoreIcon } from 'assets/icons';
 import { ReturnPost } from 'models/blog';
-import React from 'react';
+import { convertTimestampFirebase } from 'utils/DayJs';
 import { useRouter } from 'next/router';
-import  { convertTimestampFirebase } from 'utils/DayJs';
-import Link from 'next/link';
 
 export const BlogItem = ({
     category,
@@ -25,13 +25,15 @@ export const BlogItem = ({
     }
     return (
         <div
-            className={`min-w-[300px] ${type === 'related' && 'w-1/4'} 
+            className={`min-w-[300px] ${type === 'related' && 'w-1/4 tablet:w-1/2 mobile:w-full'} 
             dark:border-slate-800 border w-full h-full
               ${type !== 'slide' && 'light-item-shadow'} dark:shadow-2xl
              bg-white dark:bgc-deep-dark 
                rounded-lg py-3 px-6 flex flex-col gap-3 ${type === 'slide' && 'mx-4'}`}
         >
-            <div className="text-info dark:text-white">{convertTimestampFirebase({date:createAt})}</div>
+            <div className="text-info dark:text-white">
+                {convertTimestampFirebase({ date: createAt })}
+            </div>
 
             <Link
                 className="text-sub-header  dark:text-white cursor-pointer 
