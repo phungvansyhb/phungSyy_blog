@@ -1,25 +1,26 @@
+import { KeyDb, Post } from 'models/blog';
 import React, { FormEvent, Ref } from 'react';
-import toast from 'react-hot-toast';
-import { useQueryClient, useQuery, useMutation } from 'react-query';
-import { GroupBase } from 'react-select';
-import CreatableSelect from 'react-select/creatable';
-import Select from 'react-select/dist/declarations/src/Select';
 import {
-    getListDocs,
-    createDoc,
-    updateDocument,
-    writeBatchDoc,
     WriteBatchParam,
+    createDoc,
+    getListDocs,
+    updateDocument,
     uploadImageAndReturnUrl,
+    writeBatchDoc,
 } from '../services/fireBase.service';
-import { Post, KeyDb } from 'models/blog';
+import { useMutation, useQuery, useQueryClient } from 'react-query';
+
+import CreatableSelect from 'react-select/creatable';
 import Editor from 'components/Editor';
+import { GroupBase } from 'react-select';
+import { ImageType } from 'react-images-uploading';
+import { LoadingIcon } from 'assets/icons';
+import Select from 'react-select/dist/declarations/src/Select';
+import Upload from './Upload';
+import { toSlug } from 'utils/toSlug';
+import toast from 'react-hot-toast';
 import { useEffect } from 'react';
 import { useRouter } from 'next/router';
-import { LoadingIcon } from 'assets/icons';
-import { toSlug } from 'utils/toSlug';
-import Upload from './Upload';
-import { ImageType } from 'react-images-uploading';
 
 type Props = { isEdit: boolean; initPost?: Post & { content: string } };
 
@@ -45,7 +46,7 @@ export const PageEditor = ({ isEdit, initPost }: Props) => {
     );
     const createCategory = useMutation(
         'createMutation',
-        (cateName: string) => createDoc(KeyDb.CATEGORY, { name: cateName }),
+        (cateName: string) => createDoc(KeyDb.CATEGORY, { name: cateName , isDeleted:false }),
         {
             onSuccess: (_idCreated, variable) => {
                 if (Array.isArray(data)) {
