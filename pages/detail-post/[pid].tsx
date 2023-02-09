@@ -237,7 +237,7 @@ const BlogDetail: NextPageWithLayout = ({ data }: { data: PostDetail }) => {
                                 });
                             }}
                         />
-                        <div className="text-xs font-light italic text-right">
+                        <div className="text-xs font-light italic text-center">
                             Tạo lúc{' '}
                             {convertTimestampFirebase({
                                 date: data.createAt,
