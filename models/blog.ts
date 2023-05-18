@@ -21,6 +21,7 @@ export type PostDetail = Post & {
     createAt : TimeStamp
 }
 export enum KeyDb {
+    TOOL = 'tools',
     POST = 'posts',
     POSTDETAIL = 'detail-post',
     CATEGORY = 'categories',

@@ -1,7 +1,7 @@
 import React from 'react';
-import Layout from '../../components/Layout';
-import Table from '../../components/Table';
-import { AddIcon, DeleteIcon, EditIcon } from '../../assets/icons';
+import Layout from '../../../components/Layout';
+import Table from '../../../components/Table';
+import { AddIcon, DeleteIcon, EditIcon } from '../../../assets/icons';
 import { useRouter } from 'next/router';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 import {
@@ -15,14 +15,15 @@ import { KeyDb, Post } from 'models/blog';
 import toast from 'react-hot-toast';
 import { DocumentData } from 'firebase/firestore';
 import dayjs from 'dayjs';
+import { ToolModel } from 'models/tool.model';
 // import type Post from 'models/blog'
 
 const Page = () => {
     const router = useRouter();
     const queryClient = useQueryClient();
     const { data, isLoading } = useQuery(
-        'getAllPost',
-        () => getListDocs({ key: KeyDb.POST, orderKey: 'updateAt', orderDirection: 'desc' }),
+        'getAllTool',
+        () => getListDocs({ key: KeyDb.TOOL, orderKey: 'updateAt', orderDirection: 'desc' }),
         {
             initialData: [],
             select: (data) => {
@@ -41,22 +42,21 @@ const Page = () => {
     const deletePost = useMutation(
         ({ key }: { key: string }) => {
             const paramsObj: WriteBatchParam[] = [
-                { type: 'delete', key: KeyDb.POST, customId: key },
-                { type: 'delete', key: KeyDb.POSTDETAIL, customId: key },
+                { type: 'delete', key: KeyDb.TOOL, customId: key },
             ];
             return writeBatchDoc(paramsObj);
             // return deleteDocument(KeyDb.POST, [key]);
         },
         {
             onSuccess: (_data, { key }) => {
-                const data = queryClient.getQueryData<Post[]>('getAllPost');
-                queryClient.setQueryData('getAllPost', () =>
+                const data = queryClient.getQueryData<ToolModel[]>('getAllTool');
+                queryClient.setQueryData('getAllTool', () =>
                     data?.filter((item) => item.id !== key)
                 );
-                toast.success('Xóa bài viết thành công');
+                toast.success('Xóa tool thành công');
             },
             onError: () => {
-                toast.error('Xóa bài viết thất bại');
+                toast.error('Xóa tool thất bại');
             },
         }
     );
@@ -75,7 +75,8 @@ const Page = () => {
                                 </td>
                             ),
                         },
-                        { index: 'title', title: 'Tên bài viết', align: 'center' },
+                        { index: 'title', title: 'Tên công cụ', align: 'center' },
+                        { index: 'avatar', title: 'Ảnh mô tả', align: 'center' },
                         {
                             index: 'isPublic',
                             title: 'Công khai',
@@ -83,7 +84,7 @@ const Page = () => {
                                 <div className="text-center">{record.isPublic ? '👌' : '🚫'}</div>
                             ),
                         },
-                        { index: 'category', title: 'Chủ đề', align: 'center' },
+                        { index: 'category', title: 'Mô tả', align: 'center' },
                         { index: 'updateAt', title: 'Chỉnh sửa gần nhất', align: 'center' },
                         {
                             index: 'action',
@@ -95,7 +96,7 @@ const Page = () => {
                                 >
                                     <button
                                         onClick={() => {
-                                            router.push(`/admin/edit/${record.id}`);
+                                            router.push(`/admin/blog/edit/${record.id}`);
                                         }}
                                     >
                                         <EditIcon className="w-6 h-6" />
@@ -122,15 +123,15 @@ const Page = () => {
                 position={{ bottom: 20, right: 20 }}
                 width={55}
                 height={55}
-                action={() => router.push('/admin/create-post')}
-                tooltip="Create new post"
+                action={() => router.push('/admin/tool/create-tool')}
+                tooltip="Create new tool"
             />
         </div>
     );
 };
 Page.getLayout = function (page: React.ReactElement) {
     return (
-        <Layout metaObject={{ title: 'Admin editor', description: 'Trang viết bài' }}>
+        <Layout metaObject={{ title: 'Admin editor', description: 'Trang công cụ' }}>
             {page}
         </Layout>
     );

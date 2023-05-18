@@ -18,6 +18,7 @@ import {
     ProjectIconHeader,
     SkypeIcon
 } from "../assets/icons";
+import ToolHeader from "assets/icons/ToolHeader";
 ``;
 const Switch = dynamic(import("./Switch"), { ssr: false });
 // import useScreenDetect from "../hooks/useScreenDetect";
@@ -53,8 +54,8 @@ export default function Layout({ children, metaObject, removeStickyHeader }: Pro
                     <meta name="description" content={metaObject.description} />
                     <meta name="viewport" content="width=device-width, initial-scale=1" />
                     <meta name="author" content="Sỹ PV" />
-                    <meta name="language" content = "VI"/>
-                    <meta name="reply-to" content = "phungvansyhb@gmail.com"/>
+                    <meta name="language" content="VI" />
+                    <meta name="reply-to" content="phungvansyhb@gmail.com" />
                     <link rel="icon" href="/medal.svg" />
                 </Head>
             )}
@@ -93,6 +94,14 @@ export default function Layout({ children, metaObject, removeStickyHeader }: Pro
                                 <AboutIconHeader className="w-6 h-6" /> Me
                             </Link>
                         </div>
+                        <div className={`${pathname === "/tools" && "active-menu"}`}>
+                            <Link
+                                href="/tools"
+                                className={`flex gap-2 items-center text-header dark:text-white text-primary `}
+                            >
+                                <ToolHeader className="w-6 h-6" /> Play Tool
+                            </Link>
+                        </div>
                     </section>
                     <div className="mobile:hidden">
                         <Switch
@@ -106,9 +115,9 @@ export default function Layout({ children, metaObject, removeStickyHeader }: Pro
                         />
                     </div>
                     {
-                        !pathname.includes("/admin") &&  <button data-tally-open="wkbgqe" data-tally-emoji-text="👋" data-tally-emoji-animation="wave" className="fixed bottom-20 right-8 text-4xl mobile:text-3xl wave z-50">👋</button>
+                        !pathname.includes("/admin") && <button data-tally-open="wkbgqe" data-tally-emoji-text="👋" data-tally-emoji-animation="wave" className="fixed bottom-20 right-8 text-4xl mobile:text-3xl wave z-50">👋</button>
                     }
-                   
+
                 </header>
                 <main>
                     {children}
