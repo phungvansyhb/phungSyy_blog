@@ -21,28 +21,18 @@ const initData: ToolModel =
 
 export default function DevToolItem(props: Props & { index: number }) {
     return (
-        <motion.div
-            className={`flex tablet:flex-col mobile:flex-col items-center justify-center 
-        ${props.index % 2 === 1 && "flex-row-reverse"} 
-        gap-12 tablet:gap-4 mobile:gap-2 
-       `}
-            initial={{ opacity: 0, x: props.index % 2 === 0 ? "70%" : "-70%" }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ type: "spring", duration: 1 }}
-        >
-            <div className='flex dark:shadow-2xl
+
+        <div className='flex dark:shadow-2xl
         bg-white dark:bgc-deep-dark w-full
           rounded-lg py-3 px-6 gap-3 dark:border-slate-800 border '>
-                <div className='h-full w-1/3'>
-                    <img src={props.avatar} alt='tool-avatar' className='object-cover rounded-lg'></img>
-                </div>
-                <div className='flex flex-col justify-between py-4'>
-                    <div className='font-bold text-3xl dark:text-white mb-4'>{props.title}</div>
-                    <div className='font-bold  dark:text-white flex-grow' dangerouslySetInnerHTML={{ __html: props.description }}></div>
-                    <Link href={props.url} className='dark:text-white underline-offset-4 underline'>View Detail</Link>
-                </div>
+            <div className='h-full w-1/3'>
+                <img src={props.avatar} alt='tool-avatar' className='object-cover rounded-lg'></img>
             </div>
-        </motion.div>
+            <div className='flex flex-col justify-between py-4'>
+                <div className='font-bold text-3xl dark:text-white mb-4'>{props.title}</div>
+                <div className='font-bold  dark:text-white flex-grow' dangerouslySetInnerHTML={{ __html: props.description }}></div>
+                <Link href={props.url} className='dark:text-white underline-offset-4 underline'>View Detail</Link>
+            </div>
+        </div>
     )
 }

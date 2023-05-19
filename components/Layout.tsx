@@ -99,7 +99,7 @@ export default function Layout({ children, metaObject, removeStickyHeader }: Pro
                                 href="/tools"
                                 className={`flex gap-2 items-center text-header dark:text-white text-primary `}
                             >
-                                <ToolHeader className="w-6 h-6" /> Play Tool
+                                <ToolHeader className="w-6 h-6" /> Tools
                             </Link>
                         </div>
                     </section>
