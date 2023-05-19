@@ -1,6 +1,11 @@
+import { LoadingIcon } from 'assets/icons'
 import DevToolItem from 'components/DevToolItem'
 import Layout from 'components/Layout'
+import { KeyDb } from 'models/blog'
+import { ToolModel } from 'models/tool.model'
 import { ReactNode } from 'react'
+import { useQuery } from 'react-query'
+import { getListDocs } from 'services/fireBase.service'
 const data = [
     {
         id: 'asd123',
@@ -25,13 +30,34 @@ const data = [
         isPublic: true
     }]
 const Tool = () => {
-    return (
-        <section className="px-6 mobile:px-4 py-12 mobile:py-8 h-main-content dark:bgc-dark ">
-            <div className='flex flex-col gap-4'>
-                {data.map((item, index) => <DevToolItem {...item} key={item.id} index={index} />)}
-            </div>
-        </section>
-    )
+    const { data, isLoading } = useQuery({
+        queryKey: ['getListTool'],
+        queryFn: () => getListDocs({
+            key: KeyDb.TOOL,
+            orderKey: 'updateAt',
+            orderDirection: 'desc',
+            whereClause: [['isPublic', '==', true]],
+        })
+    })
+    const RenderTool = () => {
+        if (isLoading)
+            return (
+                <div className="w-full flex justify-center">
+                    <LoadingIcon className="w-6 h-6 animate-spin" />
+                </div>
+            );
+        if (Array.isArray(data)) {
+            return (data as ToolModel[]).map((item, index) => (
+                <DevToolItem {...item} key={item.id} index={index} />
+            ))
+        }
+        return <></>;
+    }
+    return <section className="px-6 mobile:px-4 py-12 mobile:py-8 h-main-content dark:bgc-dark ">
+        <div className='flex flex-col gap-4'>
+            {RenderTool()}
+        </div>
+    </section>
 }
 Tool.getLayout = (page: React.ReactElement) =>
     <Layout metaObject={{ title: "Usefull DevTool", description: "Các tool hữu ích cho anh em dev" }}>

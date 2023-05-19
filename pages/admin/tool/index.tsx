@@ -1,21 +1,19 @@
-import React from 'react';
-import Layout from '../../../components/Layout';
-import Table from '../../../components/Table';
-import { AddIcon, DeleteIcon, EditIcon } from '../../../assets/icons';
+import { DocumentData } from 'firebase/firestore';
+import { KeyDb } from 'models/blog';
+import { ToolModel } from 'models/tool.model';
 import { useRouter } from 'next/router';
+import React from 'react';
+import toast from 'react-hot-toast';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 import {
-    getListDocs,
-    deleteDocument,
-    writeBatchDoc,
     WriteBatchParam,
+    deleteDocument,
+    getListDocs,
+    writeBatchDoc
 } from 'services/fireBase.service';
-import { ArchonButton } from 'components';
-import { KeyDb, Post } from 'models/blog';
-import toast from 'react-hot-toast';
-import { DocumentData } from 'firebase/firestore';
-import dayjs from 'dayjs';
-import { ToolModel } from 'models/tool.model';
+import { DeleteIcon, EditIcon } from '../../../assets/icons';
+import Layout from '../../../components/Layout';
+import Table from '../../../components/Table';
 // import type Post from 'models/blog'
 
 const Page = () => {
@@ -41,11 +39,11 @@ const Page = () => {
     );
     const deletePost = useMutation(
         ({ key }: { key: string }) => {
-            const paramsObj: WriteBatchParam[] = [
-                { type: 'delete', key: KeyDb.TOOL, customId: key },
-            ];
-            return writeBatchDoc(paramsObj);
-            // return deleteDocument(KeyDb.POST, [key]);
+            // const paramsObj: WriteBatchParam[] = [
+            //     { type: 'delete', key: KeyDb.TOOL, customId: key },
+            // ];
+            // return writeBatchDoc(paramsObj);
+            return deleteDocument(KeyDb.TOOL, [key]);
         },
         {
             onSuccess: (_data, { key }) => {
@@ -62,6 +60,9 @@ const Page = () => {
     );
     return (
         <div className="h-main-content">
+            <div className='text-right p-4'>
+                <button className='p-4 rounded-lg bg-blue-600 text-white font-bold ' onClick={() => router.push('/admin/tool/create-tool')} >Create</button>
+            </div>
             {Array.isArray(data) && (
                 <Table
                     loading={isLoading}
@@ -76,15 +77,27 @@ const Page = () => {
                             ),
                         },
                         { index: 'title', title: 'Tên công cụ', align: 'center' },
-                        { index: 'avatar', title: 'Ảnh mô tả', align: 'center' },
+                        {
+                            index: 'avatar', title: 'Ảnh mô tả', align: 'center', render: (_index, record) => (
+                                <td className='flex justify-center'>
+                                    <div className='w-10 h-10 '>
+                                        <img src={record.avatar} className='object-fill' alt='avatar-tool' ></img>
+                                    </div>
+                                </td>
+
+                            ),
+                        },
                         {
                             index: 'isPublic',
                             title: 'Công khai',
                             render: (_index, record) => (
-                                <div className="text-center">{record.isPublic ? '👌' : '🚫'}</div>
+                                <td>
+
+                                    <div className="text-center">{record.isPublic ? '👌' : '🚫'}</div>
+                                </td>
                             ),
                         },
-                        { index: 'category', title: 'Mô tả', align: 'center' },
+                        { index: 'description', title: 'Mô tả', align: 'center', render: (_index, record) => <td dangerouslySetInnerHTML={{ __html: record.description }}></td> },
                         { index: 'updateAt', title: 'Chỉnh sửa gần nhất', align: 'center' },
                         {
                             index: 'action',
@@ -96,7 +109,7 @@ const Page = () => {
                                 >
                                     <button
                                         onClick={() => {
-                                            router.push(`/admin/blog/edit/${record.id}`);
+                                            router.push(`/admin/tool/edit/${record.id}`);
                                         }}
                                     >
                                         <EditIcon className="w-6 h-6" />
@@ -118,14 +131,7 @@ const Page = () => {
                     data={data}
                 ></Table>
             )}
-            <ArchonButton
-                icon={<AddIcon className="w-6 h-6 font-bold text-white" />}
-                position={{ bottom: 20, right: 20 }}
-                width={55}
-                height={55}
-                action={() => router.push('/admin/tool/create-tool')}
-                tooltip="Create new tool"
-            />
+
         </div>
     );
 };
