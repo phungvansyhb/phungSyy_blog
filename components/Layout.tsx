@@ -69,7 +69,7 @@ export default function Layout({ children, metaObject, removeStickyHeader }: Pro
                         ${removeStickyHeader ? "" : "sticky"} top-0 z-[1090]`}
                 >
                     <Toaster position="top-center" />
-                    <section className="flex gap-8 tablet:gap-6 mobile:gap-4 mobile:justify-around mobile:w-full">
+                    <section className="flex gap-8 tablet:gap-6 mobile:gap-4 mobile:w-full">
                         <div className={`${pathname === "/" && "active-menu"}`}>
                             <Link
                                 href="/"

@@ -60,7 +60,7 @@ const Tool = () => {
     </section>
 }
 Tool.getLayout = (page: React.ReactElement) =>
-    <Layout metaObject={{ title: "Usefull DevTool", description: "Các tool hữu ích cho anh em dev" }}>
+    <Layout metaObject={{ title: "Usefull DevTool", description: "Các tool hữu ích cho anh em dev nhanh hơn" }}>
         {page}
     </Layout>
 
