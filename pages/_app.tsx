@@ -57,7 +57,7 @@ export default function App({ Component, pageProps }: AppPropsWithLayout) {
             <main className="font-sans">
                 {/* <script async src="https://tally.so/widgets/embed.js"></script> */}
                 <Script src="https://tally.so/widgets/embed.js" />
-                {isLoading && <PageLoading/> }
+                {isLoading && <PageLoading />}
                 <Component {...pageProps} />
             </main>
             <ReactQueryDevtools initialIsOpen={false} />

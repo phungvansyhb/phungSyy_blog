@@ -3,7 +3,7 @@ import Slide from "components/Slide";
 import ViewAllPost from "components/ViewAllPost";
 import Layout from "../components/Layout";
 import { NextPageWithLayout } from "./_app";
-
+import 'prismjs/themes/prism.css';
 // const PageContext = createContext()
 
 const Page: NextPageWithLayout = () => {

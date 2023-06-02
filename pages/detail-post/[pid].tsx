@@ -4,7 +4,7 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { BackIcon, BookIcon, CommentIcon, LatestIcon, LoadingIcon } from 'assets/icons';
 import { GetStaticPaths, GetStaticProps } from 'next';
 import { KeyDb, Post, PostDetail, ReturnPost } from 'models/blog';
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import React, { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { getCookie, setCookie } from 'cookies-next';
 import { getDetailDoc, getListDocs } from 'services/fireBase.service';
 
@@ -26,6 +26,9 @@ import { useCookie } from 'hooks/useCookies';
 import { useQuery } from 'react-query';
 import { useRouter } from 'next/router';
 import { visit } from 'unist-util-visit';
+import hljs from 'highlight.js';
+import 'highlight.js/styles/github.css';
+import { toast } from 'react-hot-toast';
 
 const Giscus = dynamic(import('@giscus/react'), { ssr: false });
 
@@ -127,6 +130,38 @@ const BlogDetail: NextPageWithLayout = ({ data }: { data: PostDetail }) => {
         return () => window.removeEventListener('scroll', removeOutLine);
     }, [titleRef.current?.classList]);
 
+    useEffect(() => {
+        const quill = document.querySelector('.ql-editor');
+        if (quill) {
+            const codeBlocks = quill.querySelectorAll('pre');
+            codeBlocks.forEach((codeBlock) => {
+                const language = codeBlock.getAttribute('data-language') || 'javascript';
+                codeBlock.classList.add(`hljs`, `language-${language}`, 'relative', '!bg-[#161b22]', '!rounded-xl', 'shadow');
+                // hljs.highlightElement(codeBlock);
+                attackButtonCopy(codeBlock)
+            });
+        }
+    }, []);
+
+    function attackButtonCopy(codeBlock: HTMLPreElement) {
+        const button = document.createElement("button")
+        button.innerText = "Copy"
+        button.classList.add("absolute", "top-2", "right-2", "border", "border-solid", "text-sm", "rounded-sm", "px-2")
+        codeBlock.appendChild(button)
+        button.addEventListener('click', () => {
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(codeBlock.innerText)
+                    .then(() => {
+                        toast.success('Coppied')
+                    })
+                    .catch((error) => {
+                        toast.error('Coppied error')
+                    });
+            } else {
+                toast.error('Coppied error')
+            }
+        })
+    }
     function renderRelatedPost() {
         if (isFetchingRelated)
             return (

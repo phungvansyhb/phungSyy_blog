@@ -79,7 +79,9 @@ body {
   //     text-transform: capitalize;
   //   }
   // }
-
+  .ql-snow .ql-editor pre.ql-syntax {
+    background-color: #cc497f !important;
+  }
   h2 {
     margin-top: 10px;
     margin-bottom: 10px;
@@ -129,7 +131,9 @@ body {
     //   content: '"';
     // }
   }
-
+  .ql-snow .ql-editor pre.ql-syntax {
+    background-color: #24292f !important;
+  }
   a {
     // text-decoration:none !important;
     font-style: italic;
@@ -265,7 +269,7 @@ body {
   .page-container {
     @apply px-[120px] tablet:px-[40px] mobile:px-4
   }
-
+ 
   .title-pinned {
     background-color: white;
     font-size: 20px !important;

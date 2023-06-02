@@ -1,9 +1,13 @@
 import dynamic from 'next/dynamic';
+import { useEffect } from 'react';
 import { uploadImageAndReturnUrl } from 'services/fireBase.service';
+// import 'highlight.js/styles/default.css';
+// import Hljs from 'highlight.js'
 
 const QuillNoSSRWrapper = dynamic(import('react-quill'), {
     ssr: false,
     loading: () => <p>Loading ...</p>,
+
 });
 function handleImage() {
     const input = document.createElement('input');
@@ -51,6 +55,7 @@ const modules = {
         // toggle to add extra line breaks when pasting HTML:
         matchVisual: false,
     },
+    // syntax : true
 };
 
 const formats = [
@@ -75,6 +80,7 @@ const formats = [
 ];
 
 const Editor = ({ onChange, defaultValue }) => {
+  
     return (
         <QuillNoSSRWrapper
             modules={modules}
