@@ -150,6 +150,7 @@ export const PageEditor = ({ isEdit, initPost }: Props) => {
             content: content,
             path: KeyDb.POSTDETAIL +"/"+ toSlug(title),
             updateAt: new Date(),
+            view : postObj.view || 0
         };
         isEdit
             ? updatePost.mutate({ post: finalObj })

@@ -9,7 +9,8 @@ export type Post = {
     updateAt: Date;
     createAt: Date;
     isDeleted?: boolean;
-    isPublic: boolean
+    isPublic: boolean;
+    view : number
 };
 type TimeStamp = {
     seconds: number, nanoseconds: number

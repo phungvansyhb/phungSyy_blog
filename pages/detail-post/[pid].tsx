@@ -1,34 +1,35 @@
 import 'intro.js/introjs.css';
 
-import { AnimatePresence, motion } from 'framer-motion';
 import { BackIcon, BookIcon, CommentIcon, LatestIcon, LoadingIcon } from 'assets/icons';
-import { GetStaticPaths, GetStaticProps } from 'next';
-import { KeyDb, Post, PostDetail, ReturnPost } from 'models/blog';
-import React, { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { getCookie, setCookie } from 'cookies-next';
-import { getDetailDoc, getListDocs } from 'services/fireBase.service';
+import { AnimatePresence, motion } from 'framer-motion';
+import { KeyDb, PostDetail, ReturnPost } from 'models/blog';
+import { GetStaticPaths, GetStaticProps } from 'next';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
+import { getDetailDoc, getListDocs, updateDocument } from 'services/fireBase.service';
 
 import { BlogItem } from 'components/BlogItem';
-import Head from 'next/head';
 import Layout from 'components/Layout';
-import Link from 'next/link';
-import { NextPageWithLayout } from 'pages/_app';
-import { Root } from 'rehype-parse/lib';
-import { Steps } from 'intro.js-react';
-import { convertTimestampFirebase } from 'utils/DayJs';
 import dayjs from 'dayjs';
+import { increment } from 'firebase/firestore';
+import 'highlight.js/styles/github.css';
+import { useCookie } from 'hooks/useCookies';
+import { Steps } from 'intro.js-react';
 import dynamic from 'next/dynamic';
+import Head from 'next/head';
+import Link from 'next/link';
+import { useRouter } from 'next/router';
+import { parseCookies } from 'nookies';
+import { NextPageWithLayout } from 'pages/_app';
 import parameterize from 'parameterize';
+import { toast } from 'react-hot-toast';
+import { useQuery } from 'react-query';
 import rehypeParse from 'rehype-parse';
+import { Root } from 'rehype-parse/lib';
 import rehypeStringIfy from 'rehype-stringify';
 import { unified } from 'unified';
-import { useCookie } from 'hooks/useCookies';
-import { useQuery } from 'react-query';
-import { useRouter } from 'next/router';
 import { visit } from 'unist-util-visit';
-import hljs from 'highlight.js';
-import 'highlight.js/styles/github.css';
-import { toast } from 'react-hot-toast';
+import { convertTimestampFirebase } from 'utils/DayJs';
 
 const Giscus = dynamic(import('@giscus/react'), { ssr: false });
 
@@ -330,7 +331,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
         ReturnPost | undefined
     >);
     if (typeof metaData !== 'undefined') {
-        // const { updateAt, createAt, ...rest } = metaData;
+        updateDocument(KeyDb.POST + '/' + pid, { view: increment(1) })
         return { props: { data: JSON.parse(JSON.stringify({ ...content, ...metaData })) } };
     }
     return { props: { data: { ...content } } };

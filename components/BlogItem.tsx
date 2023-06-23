@@ -4,6 +4,7 @@ import { ReadMoreIcon } from 'assets/icons';
 import { ReturnPost } from 'models/blog';
 import { convertTimestampFirebase } from 'utils/DayJs';
 import { useRouter } from 'next/router';
+import EyeIcon from 'assets/icons/EyeIcon';
 
 export const BlogItem = ({
     category,
@@ -14,6 +15,7 @@ export const BlogItem = ({
     id,
     description,
     path,
+    view
 }: ReturnPost & {
     type: 'slide' | 'all' | 'related';
 }) => {
@@ -31,9 +33,13 @@ export const BlogItem = ({
              bg-white dark:bgc-deep-dark 
                rounded-lg py-3 px-6 flex flex-col gap-3 ${type === 'slide' && 'mx-4'}`}
         >
-            <div className="text-info dark:text-white">
-                {convertTimestampFirebase({ date: createAt })}
+            <div className='flex justify-between'>
+                <div className="text-info dark:text-white first-letter:uppercase">
+                    {convertTimestampFirebase({ date: createAt })}
+                </div>
+                <div className='dark:text-white font-semibold text-xs flex gap-2'><div>{view || 0}</div> <EyeIcon className='w-4 h-4' /> </div>
             </div>
+
 
             <Link
                 className="text-sub-header  dark:text-white cursor-pointer 
