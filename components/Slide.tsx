@@ -8,7 +8,7 @@ import { getListDocs } from 'services/fireBase.service';
 import { BlogItem } from './BlogItem';
 type Props = {};
 
-export default function Slide({}: Props) {
+export default function Slide({ }: Props) {
     const { data, isLoading } = useQuery(
         'getAllPost',
         () =>
@@ -33,19 +33,19 @@ export default function Slide({}: Props) {
         })(),
         items: Array.isArray(data)
             ? (data as ReturnPost[]).map((post, key) => ({
-                  id: `slide-${key}`,
-                  renderItem: <BlogItem type="slide" {...post} />,
-              }))
+                id: `slide-${key}`,
+                renderItem: <BlogItem type="slide" {...post} />,
+            }))
             : [
-                  {
-                      id: 'holder-slide',
-                      renderItem: (
-                          <div className="w-full h-full flex justify-center items-center">
-                              <LoadingIcon className="w-8 h-8 animate-spin" />
-                          </div>
-                      ),
-                  },
-              ],
+                {
+                    id: 'holder-slide',
+                    renderItem: (
+                        <div className="w-full h-full flex justify-center items-center">
+                            <LoadingIcon className="w-8 h-8 animate-spin" />
+                        </div>
+                    ),
+                },
+            ],
     });
     return (
         <div className="flex gap-8">
@@ -62,7 +62,7 @@ export default function Slide({}: Props) {
 
             <div className="flex-grow overflow-hidden">{carouselFragment}</div>
             <button onClick={slideToNextItem} className="mobile:hidden">
-                <PlayNextIcon className="w-9 h-9" />
+                <PlayNextIcon className="w-9 h-9 text-red-500" />
             </button>
         </div>
     );
