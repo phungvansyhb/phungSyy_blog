@@ -2,7 +2,7 @@ import 'intro.js/introjs.css';
 
 import { AnimatePresence, motion } from 'framer-motion';
 import { BackIcon, BookIcon, CommentIcon, LatestIcon, LoadingIcon } from 'assets/icons';
-import { GetStaticPaths, GetStaticProps } from 'next';
+import { GetServerSideProps, GetStaticPaths, GetStaticProps } from 'next';
 import { KeyDb, Post, PostDetail, ReturnPost } from 'models/blog';
 import React, { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { getCookie, setCookie } from 'cookies-next';
@@ -26,9 +26,11 @@ import { useCookie } from 'hooks/useCookies';
 import { useQuery } from 'react-query';
 import { useRouter } from 'next/router';
 import { visit } from 'unist-util-visit';
-import hljs from 'highlight.js';
+// import hljs from 'highlight.js';
 import 'highlight.js/styles/github.css';
 import { toast } from 'react-hot-toast';
+import { updateDocument } from 'services/fireBase.service';
+import { increment } from 'firebase/firestore';
 
 const Giscus = dynamic(import('@giscus/react'), { ssr: false });
 
@@ -315,6 +317,9 @@ const BlogDetail: NextPageWithLayout = ({ data }: { data: PostDetail }) => {
     return <></>;
 };
 
+
+
+
 export const getStaticPaths: GetStaticPaths<{ slug: string }> = async () => {
     return {
         paths: [], //indicates that no page needs be created at build time
@@ -329,8 +334,14 @@ export const getStaticProps: GetStaticProps = async (context) => {
     const metaData = await (getDetailDoc(KeyDb.POST, [pid as string]) as Promise<
         ReturnPost | undefined
     >);
+    // if (metaData) {
+    //     if (getCookie('viewed_' + metaData?.path) === undefined) {
+    //         setCookie('viewed_' + metaData?.path, true)
+    //         updateDocument(KeyDb.POSTDETAIL, { view: increment(1) })
+    //     }
+    // }
     if (typeof metaData !== 'undefined') {
-        // const { updateAt, createAt, ...rest } = metaData;
+        updateDocument(KeyDb.POST + "/" + pid, { view: increment(1) })
         return { props: { data: JSON.parse(JSON.stringify({ ...content, ...metaData })) } };
     }
     return { props: { data: { ...content } } };

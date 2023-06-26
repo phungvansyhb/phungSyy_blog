@@ -1,11 +1,10 @@
 import { initializeApp } from "firebase/app";
 import { getFirestore } from "firebase/firestore";
-import { getStorage , ref } from "firebase/storage";
+import { getStorage, ref } from "firebase/storage";
 
 const firebaseConfig = {
     apiKey: "AIzaSyASbuxln7HczuZWP-1cYYFbDKwMeXAnu4I",
     authDomain: "myblog-6b5c9.firebaseapp.com",
-    // The value of `databaseURL` depends on the location of the database
     databaseURL: "https://DATABASE_NAME.firebaseio.com",
     projectId: "myblog-6b5c9",
     storageBucket: "myblog-6b5c9.appspot.com",
@@ -16,5 +15,12 @@ const firebaseConfig = {
 }
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
-const storageRef =(fileName:string)=> ref(getStorage(app),'my-blog/'+fileName);
-export { db , storageRef }
+const storageRef = (fileName: string) => ref(getStorage(app), 'my-blog/' + fileName);
+
+
+
+
+
+
+export { db, storageRef };
+

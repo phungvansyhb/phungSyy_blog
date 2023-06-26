@@ -5,6 +5,7 @@ export type Post = {
     avatar:string;
     path: string;
     description: string;
+    view : number;
     category: string;
     updateAt: Date;
     createAt: Date;
