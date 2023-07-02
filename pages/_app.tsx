@@ -11,7 +11,8 @@ import { useRouter } from "next/router";
 import NProgress from "nprogress";
 import "nprogress/nprogress.css";
 import PageLoading from "components/PageLoading";
-import { getMessaging, onMessage } from "firebase/messaging";
+import { receiveMessage, requestPermission } from 'config/firebase.config'
+import useReceiveMsg from "hooks/useReceiveMsg";
 
 export type NextPageWithLayout<P = any, IP = P> = NextPage<P, IP> & {
     getLayout?: (page: ReactElement, ...props: any[]) => ReactNode;
@@ -52,13 +53,18 @@ export default function App({ Component, pageProps }: AppPropsWithLayout) {
             router.events.off("routeChangeError", handleStop);
         };
     }, [router]);
+
+    React.useEffect(() => {
+        if ("serviceWorker" in navigator) {
+            navigator.serviceWorker.addEventListener("message", (event) => {
+                console.log("event for the service worker", event);
+            });
+        }
+    }, [])
+    useReceiveMsg()
     const getLayout = Component.getLayout ?? ((page) => page);
 
-    const messaging = getMessaging();
-    onMessage(messaging, (payload) => {
-        console.log('Message received. ', payload);
-        // ...
-    });
+
     return getLayout(
         <QueryClientProvider client={queryClient}>
             <main className="font-sans">
