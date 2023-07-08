@@ -19,7 +19,6 @@ import dynamic from 'next/dynamic';
 import Head from 'next/head';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { parseCookies } from 'nookies';
 import { NextPageWithLayout } from 'pages/_app';
 import parameterize from 'parameterize';
 import { toast } from 'react-hot-toast';
@@ -71,9 +70,9 @@ function parseHTML(pageContent: string) {
     return { toc: TOC, content };
 }
 
-const BlogDetail: NextPageWithLayout = ({ data }: { data: PostDetail }) => {
+const BlogDetail: NextPageWithLayout = ({ data, pid }: { data: PostDetail, pid: string }) => {
     const router = useRouter();
-    const { pid } = router.query;
+    // const { pid } = router.query;
     const [theme, _setTheme] = useCookie(KeyDb.APPTHEME, '');
     const { content, toc } = useMemo(() => parseHTML(data.content), [data.content]);
     const titleRef = useRef<HTMLDivElement>(null);
@@ -102,6 +101,13 @@ const BlogDetail: NextPageWithLayout = ({ data }: { data: PostDetail }) => {
 
         { enabled: !!data?.category }
     );
+    useEffect(() => {
+        const viewedObj = JSON.parse(getCookie("phuvasy.blog::viewed")?.toString() || '{}')
+        if ( viewedObj[pid] !== true) {
+            setCookie("phuvasy.blog::viewed", {...viewedObj, [pid] : true})
+            updateDocument(KeyDb.POST + '/' + pid, { view: increment(1) })
+        }
+    }, [])
     useEffect(() => {
         if (titleRef.current) {
             const observer = new IntersectionObserver(
@@ -331,10 +337,9 @@ export const getStaticProps: GetStaticProps = async (context) => {
         ReturnPost | undefined
     >);
     if (typeof metaData !== 'undefined') {
-        updateDocument(KeyDb.POST + '/' + pid, { view: increment(1) })
-        return { props: { data: JSON.parse(JSON.stringify({ ...content, ...metaData })) } };
+        return { props: { data: JSON.parse(JSON.stringify({ ...content, ...metaData })), pid: pid } };
     }
-    return { props: { data: { ...content } } };
+    return { props: { data: { ...content }, pid: pid } };
 };
 
 BlogDetail.getLayout = function (page: React.ReactElement) {
